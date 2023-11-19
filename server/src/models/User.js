@@ -3,6 +3,12 @@ const validator = require("validator");
 const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: [true, "username is required!"],
+        trim: true,
+        maxLength: [10, "username is too long, 10 characters max"],
+    },
     email: {
         type: String,
         required: [true, "email is required!"],

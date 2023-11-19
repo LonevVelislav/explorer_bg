@@ -48,6 +48,7 @@ router.get("/:id", protect, restrict("admin"), async (req, res) => {
 router.post("/register", async (req, res) => {
     try {
         const newUser = await User.create({
+            username: req.body.username,
             email: req.body.email,
             password: req.body.password,
             confirmPassword: req.body.confirmPassword,
@@ -113,7 +114,7 @@ router.patch("/updateMe", protect, uploadPhoto(), usersPhotoConfig, async (req, 
                 "Cant change password here, go to http://localhost:3000/api/bg-explorer/users/upatePassword"
             );
         }
-        const filteredObject = filterObject(req.body, "email");
+        const filteredObject = filterObject(req.body, "email", "username");
         if (req.file) {
             filteredObject.image = req.file.filename;
         } else {
