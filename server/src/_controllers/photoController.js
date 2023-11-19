@@ -1,70 +1,12 @@
 const router = require("express").Router();
 const Photo = require("../models/Photo");
+const QueryManipulation = require("../utils/QueryManipulator");
 
 const { extractErrorMsg } = require("../utils/errorHanler");
 const { getTopPhoto } = require("../middlewares/photoMiddlewares");
 const { protect, restrict, restrictToOnwer } = require("../middlewares/authMiddlewares");
 
 const { uploadPhoto, photoConfig } = require("../middlewares/uploadPhotoMiddleware");
-
-//class for basic query manipulation
-class QueryManipulation {
-    constructor(query, requestQuery) {
-        this.query = query;
-        this.requestQuery = requestQuery;
-    }
-
-    filter() {
-        const queryCopy = { ...this.requestQuery };
-        const excludedFields = ["page", "sort", "limit", "fields"];
-        excludedFields.forEach((el) => delete queryCopy[el]);
-
-        let queryString = JSON.stringify(queryCopy);
-
-        queryString = queryString.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
-        this.query = this.query.find(JSON.parse(queryString));
-
-        return this;
-    }
-
-    sort() {
-        if (this.requestQuery.sort) {
-            const sortBy = this.requestQuery.sort.split(",").join(" ");
-            this.query.sort(sortBy);
-        } else {
-            this.query.sort("-createdAt");
-        }
-        return this;
-    }
-
-    filterFields() {
-        if (this.requestQuery.fields) {
-            const fields = this.requestQuery.fields.split(",").join(" ");
-            this.query = this.query.select(fields);
-        } else {
-            this.query = this.query.select("-__v");
-            this.query = this.query.select("-secretPhoto");
-        }
-        return this;
-    }
-
-    paginate() {
-        const page = this.requestQuery.page * 1 || 1;
-        const limit = this.requestQuery.limit * 1 || 10;
-        const skip = (page - 1) * limit;
-
-        this.query = this.query.skip(skip).limit(limit);
-
-        return this;
-    }
-    searchByregion() {
-        if (this.requestQuery.region) {
-            const region = this.requestQuery.region;
-            this.query = this.query.find({ region: region });
-        }
-        return this;
-    }
-}
 
 // routes
 router.get("/", async (req, res) => {
@@ -157,24 +99,46 @@ router.post("/", protect, restrict("user"), uploadPhoto(), photoConfig, async (r
     }
 });
 
-router.patch("/:id", protect, restrictToOnwer, uploadPhoto(), photoConfig, async (req, res) => {
-    try {
-        if (!req.file) {
-            throw new Error("Photo is required! Upload a photo and try again!");
-        }
-        const photo = await Photo.findByIdAndUpdate(
-            req.params.id,
-            { ...req.body, image: req.file.filename },
-            {
-                new: true,
-                runValidators: true,
+router.patch(
+    "/:id",
+    protect,
+    restrictToOnwer("Photo"),
+    uploadPhoto(),
+    photoConfig,
+    async (req, res) => {
+        try {
+            if (!req.file) {
+                throw new Error("Photo is required! Upload a photo and try again!");
             }
-        );
-        res.status(201).json({
+            const photo = await Photo.findByIdAndUpdate(
+                req.params.id,
+                { ...req.body, image: req.file.filename },
+                {
+                    new: true,
+                    runValidators: true,
+                }
+            );
+            res.status(201).json({
+                status: "success",
+                data: {
+                    photo,
+                },
+            });
+        } catch (err) {
+            res.status(400).json({
+                status: "fail",
+                message: extractErrorMsg(err),
+            });
+        }
+    }
+);
+
+router.delete("/:id", protect, restrictToOnwer("Photo"), async (req, res) => {
+    try {
+        await Photo.findByIdAndDelete(req.params.id);
+        res.status(204).json({
             status: "success",
-            data: {
-                photo,
-            },
+            data: null,
         });
     } catch (err) {
         res.status(400).json({
@@ -184,12 +148,22 @@ router.patch("/:id", protect, restrictToOnwer, uploadPhoto(), photoConfig, async
     }
 });
 
-router.delete("/:id", protect, restrictToOnwer, async (req, res) => {
+router.get("/like/:id", protect, restrict("user"), async (req, res) => {
     try {
-        await Photo.findByIdAndDelete(req.params.id);
-        res.status(204).json({
+        const photo = await Photo.findById(req.params.id);
+        if (photo.owner.toString() === req.user._id.toString()) {
+            throw new Error("You cant post likes on your own photos!");
+        }
+        photo.likes.push(req.user._id);
+        await photo.save();
+
+        res.status(200).json({
             status: "success",
-            data: null,
+            liked: {
+                _id: photo._id,
+                name: photo.name,
+                image: photo.image,
+            },
         });
     } catch (err) {
         res.status(400).json({

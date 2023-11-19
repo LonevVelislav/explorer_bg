@@ -12,10 +12,7 @@ const photoShema = new mongoose.Schema(
         description: {
             type: String,
             trim: true,
-            maxLenght: [
-                100,
-                "description length must be below 100 characters long",
-            ],
+            maxLenght: [100, "description length must be below 100 characters long"],
         },
         region: {
             type: String,
@@ -36,10 +33,7 @@ const photoShema = new mongoose.Schema(
                     "Photo requires coordinates, right click on the pin location and copy the top two numbers.",
             },
         },
-        likes: {
-            type: Number,
-            default: 3,
-        },
+        likes: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
         createdAt: {
             type: Date,
             default: Date.now(),
@@ -53,6 +47,12 @@ const photoShema = new mongoose.Schema(
             type: mongoose.Schema.ObjectId,
             ref: "User",
         },
+        comments: [
+            {
+                type: mongoose.Schema.ObjectId,
+                ref: "Comment",
+            },
+        ],
     },
     {
         toJSON: { virtuals: true },
@@ -62,10 +62,7 @@ const photoShema = new mongoose.Schema(
 
 photoShema.pre("save", async function (next) {
     if (this.coordinates) {
-        const data = await getGeoStats(
-            this.coordinates[0],
-            this.coordinates[1]
-        );
+        const data = await getGeoStats(this.coordinates[0], this.coordinates[1]);
 
         this.region = data.address.county;
     }
