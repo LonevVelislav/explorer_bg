@@ -154,6 +154,9 @@ router.get("/like/:id", protect, restrict("user"), async (req, res) => {
         if (photo.owner.toString() === req.user._id.toString()) {
             throw new Error("You cant post likes on your own photos!");
         }
+        if (photo.likes.some((el) => el.toString() === req.user._id.toString())) {
+            throw new Error("You already liked this photo!");
+        }
         photo.likes.push(req.user._id);
         await photo.save();
 
