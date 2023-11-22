@@ -30,6 +30,7 @@ body {
   cursor: pointer;
   border: none;
   text-decoration: none;
+  text-transform: uppercase;
 }
 .btn:hover,
 .btn:active {
@@ -55,9 +56,12 @@ button:focus {
   padding: 0 4.8rem;
   margin-bottom: 2rem;
 }
+a {
+  text-decoration: none;
+}
 .header-logo {
   height: 20rem;
-  width: 20rem;
+  transform: translateX(50%);
   border-radius: 9px;
   overflow: hidden;
   cursor: pointer;
@@ -228,12 +232,12 @@ button:focus {
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
   text-transform: uppercase;
-  background: linear-gradient(
-    266deg,
-    rgba(255, 114, 114, 1) 32%,
-    rgba(85, 197, 122, 1) 33%,
-    rgba(85, 197, 122, 1) 67%,
-    rgba(208, 208, 208, 1) 68%
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    right bottom,
+    from(#7dd56f),
+    to(#28b487)
   );
 }
 
@@ -261,4 +265,184 @@ button:focus {
   height: 2.4rem;
   width: 2.4rem;
   fill: #fdf2e9;
+}
+
+/* details page--------------------------------- */
+.main--details {
+  padding: 0 3.2rem;
+  max-width: 160rem;
+  margin: 0 auto;
+}
+
+.card-heading__details {
+  font-size: 5.2rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  text-align: center;
+  color: #333;
+}
+
+.card__details {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  flex-direction: row;
+  font-size: 1.4rem;
+  background-color: #ffffff;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+.photo-box {
+  flex: 2;
+  padding: 0.8rem;
+  margin: 1rem;
+  border-radius: 3px;
+  overflow: hidden;
+  border: 2px solid #55c57a;
+}
+.photo-box img {
+  width: 100%;
+}
+svg {
+  width: 2rem;
+  height: 2rem;
+  fill: #55c57a;
+  margin-right: 1.2rem;
+}
+
+.stats-box {
+  flex: 0.5;
+  align-self: flex-start;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.stats-box ul {
+  width: 100%;
+  list-style: none;
+  margin-bottom: 3.2rem;
+}
+
+.stats-box ul li {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 2rem;
+  margin-bottom: 1.4rem;
+}
+.stats-box ul li span {
+  margin-left: 1rem;
+  font-weight: 200;
+}
+.buttons button {
+  border: none;
+  padding: 1rem 2rem;
+  width: 12.8rem;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3;
+}
+.buttons button:hover,
+.buttons button:active {
+  width: 13.8rem;
+}
+.delete-btn {
+  background-color: #ef233c;
+}
+.like-btn {
+  background-color: #fcbf49;
+}
+.like-btn:hover,
+.like-btn:active {
+  background-color: #fdd280;
+}
+.delete-btn:hover,
+.delete-btn:active {
+  background-color: #f24f63;
+}
+.comment-form {
+  display: flex;
+  text-align: center;
+}
+.comment-input {
+  font-family: inherit;
+  font-weight: inherit;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #333;
+  padding-bottom: 3px;
+  border-bottom: 2px solid #55c57a;
+  width: 25rem;
+  outline-width: 0;
+  text-transform: none;
+}
+
+.user-comment-avatar {
+  padding: 0.8rem;
+}
+.comments-section {
+  background-color: #ffffff;
+  padding: 1.2rem;
+  -webkit-box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
+}
+.comments-list {
+  list-style: none;
+}
+.comments-list li {
+  position: relative;
+  display: flex;
+  text-align: center;
+  font-size: 1.6rem;
+  border-radius: 3px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  text-align: justify;
+  background-color: #ddf3e4;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3;
+  -webkit-box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
+  /* transform: translateY(-25rem); */
+  max-width: 100rem;
+}
+.comments-list svg {
+  stroke: #55c57a;
+  fill: #55c57a;
+}
+.comments-list span {
+  color: #f7f7f7;
+  background-color: #55c57a;
+  padding: 1.6rem;
+  border-radius: 3px;
+}
+
+.comment-delete__btn {
+  background-color: #ef233c;
+  border: none;
+  padding: 0.1rem;
+  border-radius: 3px;
+  cursor: pointer;
+  padding: 0.6rem 1.8rem;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3;
+  position: relative;
+  margin-left: 1.6rem;
+  align-self: flex-start;
+}
+.comment-delete__btn::after {
+  content: "\00d7";
+  color: #f7f7f7;
+  font-size: 2.4rem;
+}
+
+.comment-delete__btn:hover,
+.comment-delete__btn:active {
+  background-color: #f46577;
+  color: #333;
 }
