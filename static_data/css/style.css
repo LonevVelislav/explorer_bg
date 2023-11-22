@@ -338,6 +338,7 @@ svg {
   margin-left: 1rem;
   font-weight: 200;
 }
+
 .buttons button {
   border: none;
   padding: 1rem 2rem;
@@ -416,8 +417,8 @@ svg {
   fill: #55c57a;
 }
 .comments-list span {
-  color: #f7f7f7;
-  background-color: #55c57a;
+  color: #333;
+  background-color: #f7f7f7;
   padding: 1.6rem;
   border-radius: 3px;
 }
