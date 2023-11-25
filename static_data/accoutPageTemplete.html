@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Explorer-Bg | Fiding the best places in bulgaria</title>
+    <link
+    href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+    <link rel="stylesheet" href="./css/style.css">
+  </head>
+  <body>
+
+    <!--Header-->
+    <header class="header">
+      <nav class="main-nav-list">
+        <form class="nav-search">
+          <button class="search-button" >
+            <svg>
+              <use xlink:href="img/icons.svg#icon-search"></use>
+            </svg>
+          </button>
+          <input
+          type="text"
+          placeholder="Search places"
+          class="nav-search-input"
+          />
+        </form>
+      </nav>
+      <div class="header-logo">
+        <img src="./img/logo//b51a5c3039844aa0a6677738cf96e916-removebg-preview.png" alt="Explorer-logo" />
+      </div>
+      <nav class="nav nav-user">
+        <a href="#" class="main-nav-link btn">All places</a>
+        <a href="#" class="main-nav-link btn">My places</a>
+        <a href="#" class="main-nav-link btn">
+          <img src="" alt="User photo" class="nav-user-img" />
+          <span>Velislav<span>
+        </a>
+        <!-- if not logged in -->
+        <!-- <button class="nav-el">Log in</button>
+        <button class="nav-el">Sign in</button> -->
+      </nav>
+    </header>
+     <main class="main-account main">
+        <form action="#" class="form">
+            <div>
+                <label for="image">Profile picture</label>
+                <input type="file" id="image" name="image" accept="image/jpeg" >
+            </div>
+            <div>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" value="Velsilav">
+            </div>
+            <div>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="vili@abv.bg">
+            </div>
+            <div class="account-btns">
+               <a class="btn" href="#">Edit</a>
+               <a class="btn" href="#">My places</a>
+            </div>
+
+            <div class="account-delete-btn">
+                <a class="delete-btn btn"href="#">Delete Account</a>
+            </div>
+        </form>
+
+
+     </main>
+
+      <div class="footer">
+        <div class="footer-logo">
+          <img src="#" alt="bg explorer-logo">
+        </div>
+      </div>
+       <p class="footer-copyright">
+        &copy; by Velislav Lonev. All right reserved
+       </p>
+    
+  </body>
+</html>
