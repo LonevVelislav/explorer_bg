@@ -55,6 +55,14 @@ class QueryManipulation {
         return this;
     }
 
+    searchByUserId() {
+        if (this.requestQuery.owner) {
+            const ownerId = this.requestQuery.owner;
+            this.query = this.query.find({ owner: ownerId });
+        }
+        return this;
+    }
+
     searchByPhotoId() {
         if (this.requestQuery.photoId) {
             const photoId = this.requestQuery.photoId;

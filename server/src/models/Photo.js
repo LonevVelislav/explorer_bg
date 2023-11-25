@@ -8,6 +8,7 @@ const photoShema = new mongoose.Schema(
             required: [true, "photo must have a name"],
             trim: true,
             minLength: [2, "name must be loneger then 1 character"],
+            maxLenght: [20, "name cant be longer then 20 characters"],
         },
         description: {
             type: String,
@@ -25,6 +26,7 @@ const photoShema = new mongoose.Schema(
         },
         coordinates: {
             type: [Number],
+            required: [true, "photo requires coordinates"],
             validate: {
                 validator: function (value) {
                     return Array.isArray(value) && value.length > 0;

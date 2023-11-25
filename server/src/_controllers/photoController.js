@@ -15,6 +15,7 @@ router.get("/", async (req, res) => {
         .sort()
         .filterFields()
         .paginate()
+        .searchByUserId()
         .searchByregion();
     try {
         const photos = await manipulated.query;
@@ -37,6 +38,23 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
     try {
         const photo = await Photo.findById(req.params.id);
+        res.status(200).json({
+            status: "success",
+            data: {
+                photo,
+            },
+        });
+    } catch (err) {
+        res.status(400).json({
+            status: "fail",
+            message: extractErrorMsg(err),
+        });
+    }
+});
+
+router.get("/:id/comments", async (req, res) => {
+    try {
+        const photo = await Photo.findById(req.params.id).populate("comments");
         res.status(200).json({
             status: "success",
             data: {
