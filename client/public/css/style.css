@@ -103,6 +103,11 @@ button:focus {
 .form a:hover {
   color: #193b25;
 }
+.user-photo {
+  border-radius: 50%;
+  width: 5rem;
+  margin-left: 1.2rem;
+}
 
 /* header-section --------------------------------------*/
 .header {
@@ -140,6 +145,7 @@ a {
 
 .main-nav-link {
   padding: 1rem;
+  margin-left: 1rem;
 }
 .main-nav-link:link,
 .main-nav-link:visited {
@@ -244,6 +250,7 @@ a {
 .card-likes span {
   font-size: 1.8rem;
   font-weight: 600;
+  color: #193b25;
 }
 
 .card-header {
@@ -615,4 +622,18 @@ svg {
 .error__msg {
   font-size: 2.2rem;
   color: #ef233c;
+}
+
+/* footer-style -------------------------------*/
+
+.footer {
+  display: flex;
+  align-items: center;
+}
+.footer div {
+  margin-right: 1.2rem;
+}
+
+.footer img {
+  width: 10rem;
 }

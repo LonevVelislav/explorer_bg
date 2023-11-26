@@ -42,5 +42,6 @@ exports.usersPhotoConfig = (req, res, next) => {
         .toFormat("jpeg")
         .jpeg({ quality: 90 })
         .toFile(`public/users/${req.file.filename}`);
+
     next();
 };

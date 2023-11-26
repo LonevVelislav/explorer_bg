@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
+const { moveFile } = require("../utils/moveFileToFolder");
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -25,7 +26,7 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, "password is required!"],
-        minlength: [8, "password must be at least 8 characters long"],
+        minlength: [5, "password must be at least 5 characters long"],
         trim: true,
         select: false,
     },
@@ -65,6 +66,11 @@ userSchema.pre("save", async function (next) {
 
 userSchema.pre(/^find/, function (next) {
     this.find({ active: { $ne: false } });
+    next();
+});
+
+userSchema.post(/^find/, function (docs, next) {
+    moveFile("public/users/", "./../client/public/img/users_photos/", docs.id, docs.image);
     next();
 });
 

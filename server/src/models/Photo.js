@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+
+const { moveFile } = require("../utils/moveFileToFolder");
 const { getGeoStats } = require("../utils/getGeoStats");
 
 const photoShema = new mongoose.Schema(
@@ -36,6 +38,7 @@ const photoShema = new mongoose.Schema(
             },
         },
         likes: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
+        stars: { type: Number, default: 0 },
         createdAt: {
             type: Date,
             default: Date.now(),
@@ -62,6 +65,11 @@ const photoShema = new mongoose.Schema(
     }
 );
 
+photoShema.pre("save", function (next) {
+    this.stars = this.likes.length;
+    next();
+});
+
 photoShema.pre("save", async function (next) {
     if (this.coordinates) {
         const data = await getGeoStats(this.coordinates[0], this.coordinates[1]);
@@ -80,8 +88,15 @@ photoShema.pre(/^find/, function (next) {
 });
 
 photoShema.post(/^find/, function (docs, next) {
-    // console.log(docs); //docs has access to found documents
+    moveFile("public/photos/", "./../client/public/img/photos/", docs.id, docs.image);
+
     console.log(`query took ${Date.now() - this.start} miliseconds`);
+
+    next();
+});
+
+photoShema.post("save", function (docs, next) {
+    moveFile("public/photos/", "./../client/public/img/photos/", docs.id, docs.image);
 
     next();
 });
