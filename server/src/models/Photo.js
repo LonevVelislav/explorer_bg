@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
+const fs = require("fs-extra");
+const path = require("path");
+const sharp = require("sharp");
 
-const { moveFile } = require("../utils/moveFileToFolder");
 const { getGeoStats } = require("../utils/getGeoStats");
 
 const photoShema = new mongoose.Schema(
@@ -11,11 +13,6 @@ const photoShema = new mongoose.Schema(
             trim: true,
             minLength: [2, "name must be loneger then 1 character"],
             maxLenght: [20, "name cant be longer then 20 characters"],
-        },
-        description: {
-            type: String,
-            trim: true,
-            maxLenght: [100, "description length must be below 100 characters long"],
         },
         region: {
             type: String,
@@ -58,12 +55,19 @@ const photoShema = new mongoose.Schema(
                 ref: "Comment",
             },
         ],
+        imagefile: {
+            type: Object,
+            default: {},
+            select: false,
+        },
     },
     {
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
     }
 );
+
+//pre middleware for all find queries.
 
 photoShema.pre("save", function (next) {
     this.stars = this.likes.length;
@@ -76,28 +80,51 @@ photoShema.pre("save", async function (next) {
 
         this.region = data.address.county;
     }
+    next();
+});
+
+photoShema.pre("save", function (next) {
+    if (this.isNew) {
+        const pathToClient = path.resolve("../client/public/img/photos");
+        const dir = `${pathToClient}/${this._id}`;
+        this.filename = `photo-${this._id}-${Date.now()}.jpeg`;
+        if (fs.existsSync(dir)) {
+            fs.emptyDir(dir)
+                .then(() => console.log("All files deleted Successfully"))
+                .catch((e) => console.log(e));
+        } else {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+
+        sharp(this.imagefile.buffer).toFormat("jpeg").toFile(`${dir}/${this.filename}`);
+        this.image = this.filename;
+        this.imagefile = undefined;
+    }
 
     next();
 });
 
-//pre middleware for all find queries.
 photoShema.pre(/^find/, function (next) {
+    if (this.op === "findOneAndUpdate") {
+        const pathToClient = path.resolve("../client/public/img/photos");
+        const dir = `${pathToClient}/${this._conditions._id}`;
+        this.filename = `photo-${this._conditions._id}-${Date.now()}.jpeg`;
+        if (fs.existsSync(dir)) {
+            fs.emptyDir(dir)
+                .then(() => console.log("All files deleted Successfully"))
+                .catch((e) => console.log(e));
+        } else {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+
+        sharp(this._update.imagefile.buffer).toFormat("jpeg").toFile(`${dir}/${this.filename}`);
+        this.image = this.filename;
+        this.imagefile = undefined;
+    }
+
     this.find({ secretPhoto: { $ne: true } });
+
     this.start = Date.now();
-    next();
-});
-
-photoShema.post(/^find/, function (docs, next) {
-    moveFile("public/photos/", "./../client/public/img/photos/", docs.id, docs.image);
-
-    console.log(`query took ${Date.now() - this.start} miliseconds`);
-
-    next();
-});
-
-photoShema.post("save", function (docs, next) {
-    moveFile("public/photos/", "./../client/public/img/photos/", docs.id, docs.image);
-
     next();
 });
 

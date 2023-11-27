@@ -14,7 +14,7 @@ export default function PhotoList() {
         <main className="main">
             <div className="card-container">
                 {photos.map((el) => {
-                    return <PhotoListItem key={el.id} {...el} />;
+                    return <PhotoListItem key={el._id} {...el} />;
                 })}
             </div>
         </main>

@@ -93,7 +93,7 @@ router.get("/top-photo", getTopPhoto, async (req, res) => {
     }
 });
 
-router.post("/", protect, restrict("user"), uploadPhoto(), photoConfig, async (req, res) => {
+router.post("/", protect, restrict("user"), uploadPhoto(), async (req, res) => {
     try {
         if (!req.file) {
             throw new Error("Photo is required! Upload a photo and try again!");
@@ -101,7 +101,7 @@ router.post("/", protect, restrict("user"), uploadPhoto(), photoConfig, async (r
         const newPhoto = await Photo.create({
             ...req.body,
             owner: req.user._id,
-            image: req.file.filename,
+            imagefile: req.file,
         });
         res.status(200).json({
             status: "success",
@@ -117,39 +117,33 @@ router.post("/", protect, restrict("user"), uploadPhoto(), photoConfig, async (r
     }
 });
 
-router.patch(
-    "/:id",
-    protect,
-    restrictToOnwer("Photo"),
-    uploadPhoto(),
-    photoConfig,
-    async (req, res) => {
-        try {
-            if (!req.file) {
-                throw new Error("Photo is required! Upload a photo and try again!");
-            }
-            const photo = await Photo.findByIdAndUpdate(
-                req.params.id,
-                { ...req.body, image: req.file.filename },
-                {
-                    new: true,
-                    runValidators: true,
-                }
-            );
-            res.status(201).json({
-                status: "success",
-                data: {
-                    photo,
-                },
-            });
-        } catch (err) {
-            res.status(400).json({
-                status: "fail",
-                message: extractErrorMsg(err),
-            });
+router.patch("/:id", protect, restrictToOnwer("Photo"), uploadPhoto(), async (req, res) => {
+    try {
+        if (!req.file) {
+            throw new Error("Photo is required! Upload a photo and try again!");
         }
+
+        const photo = await Photo.findByIdAndUpdate(
+            req.params.id,
+            { ...req.body, imagefile: req.file },
+            {
+                new: true,
+                runValidators: true,
+            }
+        );
+        res.status(201).json({
+            status: "success",
+            data: {
+                photo,
+            },
+        });
+    } catch (err) {
+        res.status(400).json({
+            status: "fail",
+            message: extractErrorMsg(err),
+        });
     }
-);
+});
 
 router.delete("/:id", protect, restrictToOnwer("Photo"), async (req, res) => {
     try {

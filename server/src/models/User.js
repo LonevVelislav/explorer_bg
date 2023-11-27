@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
-const { moveFile } = require("../utils/moveFileToFolder");
+const path = require("path");
+const fs = require("fs-extra");
+const sharp = require("sharp");
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -32,8 +34,7 @@ const userSchema = new mongoose.Schema({
     },
     image: {
         type: String,
-        required: true,
-        default: "default.jpg",
+        default: "default.jpeg",
     },
     timeEdited: {
         type: Date,
@@ -49,8 +50,11 @@ const userSchema = new mongoose.Schema({
         default: true,
         select: false,
     },
-
-    photo: String,
+    imagefile: {
+        type: Object,
+        default: {},
+        select: false,
+    },
 });
 
 userSchema.virtual("confirmPassword").set(function (value) {
@@ -65,12 +69,29 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.pre(/^find/, function (next) {
-    this.find({ active: { $ne: false } });
-    next();
-});
+    if (this.op === "findOneAndUpdate") {
+        const pathToClient = path.resolve("../client/public/img/users_photos");
+        const dir = `${pathToClient}/${this._conditions._id}`;
+        this.filename = this._update.imagefile.originalname;
+        if (fs.existsSync(dir)) {
+            fs.emptyDir(dir)
+                .then(() => console.log("All files deleted Successfully"))
+                .catch((e) => console.log(e));
+        } else {
+            fs.mkdirSync(dir, { recursive: true });
+        }
 
-userSchema.post(/^find/, function (docs, next) {
-    moveFile("public/users/", "./../client/public/img/users_photos/", docs.id, docs.image);
+        if (this._update.imagefile) {
+            sharp(this._update.imagefile.buffer)
+                .resize(500, 500)
+                .toFormat("jpeg")
+                .jpeg({ quality: 90 })
+                .toFile(`${dir}/${this.filename}`);
+        }
+        this.imagefile = undefined;
+    }
+
+    this.find({ active: { $ne: false } });
     next();
 });
 

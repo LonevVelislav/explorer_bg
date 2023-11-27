@@ -34,6 +34,7 @@ class QueryManipulation {
         } else {
             this.query = this.query.select("-__v");
             this.query = this.query.select("-secretPhoto");
+            this.query = this.query.select("-imagefile");
         }
         return this;
     }

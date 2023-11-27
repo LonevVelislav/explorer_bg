@@ -107,7 +107,7 @@ router.patch("/upatePassword", protect, async (req, res) => {
     }
 });
 
-router.patch("/updateMe", protect, uploadPhoto(), usersPhotoConfig, async (req, res) => {
+router.patch("/updateMe", protect, uploadPhoto(), async (req, res) => {
     try {
         if (req.body.password || req.body.confirmPassword) {
             throw new Error(
@@ -115,16 +115,20 @@ router.patch("/updateMe", protect, uploadPhoto(), usersPhotoConfig, async (req, 
             );
         }
         const filteredObject = filterObject(req.body, "email", "username");
+
         if (req.file) {
-            filteredObject.image = req.file.filename;
-        } else {
-            filteredObject.image = "default.jpeg";
+            filteredObject.imagefile = req.file;
+            filteredObject.image = req.file.originalname;
         }
 
-        const user = await User.findByIdAndUpdate(req.user._id, filteredObject, {
-            runValidators: true,
-            new: true,
-        });
+        const user = await User.findByIdAndUpdate(
+            req.user._id,
+            { ...filteredObject },
+            {
+                runValidators: true,
+                new: true,
+            }
+        );
 
         res.status(200).json({
             status: "success",

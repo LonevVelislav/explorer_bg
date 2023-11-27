@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
 
-export default function PhotoListItem({ id, image, name, region, stars }) {
-    const serverPhotosUrl = './../../../../../server/public/photos';
-
+export default function PhotoListItem({ _id, image, name, region, stars }) {
     return (
-        <Link to={`/games/${id}`}>
+        <Link to={`/games/${_id}`}>
             <div className="card">
                 <div className="card-likes">
                     <svg>
@@ -17,7 +15,7 @@ export default function PhotoListItem({ id, image, name, region, stars }) {
                         <div className="card-picture-overlay">&nbsp;</div>
                         <img
                             className="card-picture-image"
-                            src={`./server/public/photos/${id}/${image}`}
+                            src={`/public/img/photos/${_id}/${image}`}
                             alt="place 1"
                         />
                     </div>
