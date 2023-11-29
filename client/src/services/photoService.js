@@ -1,10 +1,23 @@
+import * as request from '../utils/request';
+
 const baseUrl = 'http://localhost:3000/api/bg-explorer/photos';
 
 export const getAllPhotos = async () => {
-    const res = await fetch(
+    const result = await request.get(
         `${baseUrl}?sort=-stars&page=1&limit=10&fields=[_id,name,image,stars,region,]`
     );
 
-    const data = await res.json();
-    return data;
+    return result;
+};
+
+export const getPhotoById = async (id) => {
+    const result = await request.get(`${baseUrl}/${id}/comments&owner`);
+
+    return result;
+};
+
+export const getCoordinates = async (id) => {
+    const result = await request.get(`${baseUrl}/${id}/coordinates`);
+
+    return result;
 };

@@ -7,7 +7,7 @@ export default function PhotoList() {
     const [photos, setPhotos] = useState([]);
 
     useEffect(() => {
-        photoService.getAllPhotos().then((el) => setPhotos(Object.values(el.data.photos)));
+        photoService.getAllPhotos().then((el) => setPhotos(el.data.photos));
     }, []);
 
     return (

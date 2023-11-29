@@ -52,9 +52,11 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-router.get("/:id/comments", async (req, res) => {
+router.get("/:id/comments&owner", async (req, res) => {
     try {
-        const photo = await Photo.findById(req.params.id).populate("comments");
+        const photo = await Photo.findById(req.params.id)
+            .populate("comments")
+            .populate("owner", "username");
         res.status(200).json({
             status: "success",
             data: {
@@ -64,6 +66,27 @@ router.get("/:id/comments", async (req, res) => {
     } catch (err) {
         res.status(400).json({
             status: "fail",
+            message: extractErrorMsg(err),
+        });
+    }
+});
+
+router.get("/:id/coordinates", async (req, res) => {
+    try {
+        const photo = await Photo.find({ _id: req.params.id })
+            .select("lat")
+            .select("lng")
+            .select("name");
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                photo,
+            },
+        });
+    } catch (err) {
+        res.status(400).json({
+            status: "fial",
             message: extractErrorMsg(err),
         });
     }
@@ -102,6 +125,7 @@ router.post("/", protect, restrict("user"), uploadPhoto(), async (req, res) => {
             ...req.body,
             owner: req.user._id,
             imagefile: req.file,
+            image: req.file.originalname,
         });
         res.status(200).json({
             status: "success",
@@ -125,7 +149,7 @@ router.patch("/:id", protect, restrictToOnwer("Photo"), uploadPhoto(), async (re
 
         const photo = await Photo.findByIdAndUpdate(
             req.params.id,
-            { ...req.body, imagefile: req.file },
+            { ...req.body, imagefile: req.file, image: req.file.originalname, region: "" },
             {
                 new: true,
                 runValidators: true,

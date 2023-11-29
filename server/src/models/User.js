@@ -68,28 +68,32 @@ userSchema.pre("save", async function (next) {
     next();
 });
 
-userSchema.pre(/^find/, function (next) {
+userSchema.pre(/^find/, async function (next) {
     if (this.op === "findOneAndUpdate") {
         const pathToClient = path.resolve("../client/public/img/users_photos");
         const dir = `${pathToClient}/${this._conditions._id}`;
         this.filename = this._update.imagefile.originalname;
         if (fs.existsSync(dir)) {
-            fs.emptyDir(dir)
-                .then(() => console.log("All files deleted Successfully"))
-                .catch((e) => console.log(e));
+            await fs.emptyDir(dir);
+            if (this._update.imagefile) {
+                sharp(this._update.imagefile.buffer)
+                    .resize(500, 500)
+                    .toFormat("jpeg")
+                    .jpeg({ quality: 90 })
+                    .toFile(`${dir}/${this.filename}`);
+            }
         } else {
             fs.mkdirSync(dir, { recursive: true });
+            if (this._update.imagefile) {
+                sharp(this._update.imagefile.buffer)
+                    .resize(500, 500)
+                    .toFormat("jpeg")
+                    .jpeg({ quality: 90 })
+                    .toFile(`${dir}/${this.filename}`);
+            }
         }
-
-        if (this._update.imagefile) {
-            sharp(this._update.imagefile.buffer)
-                .resize(500, 500)
-                .toFormat("jpeg")
-                .jpeg({ quality: 90 })
-                .toFile(`${dir}/${this.filename}`);
-        }
-        this.imagefile = undefined;
     }
+    this.imagefile = undefined;
 
     this.find({ active: { $ne: false } });
     next();

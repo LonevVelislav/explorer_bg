@@ -55,6 +55,7 @@ router.post("/create/:photoId", protect, restrict("user"), async (req, res) => {
             name: req.user.username,
             photoId: req.params.photoId,
             owner: req.user._id,
+            photo: req.user.image,
         });
         const photo = await Photo.findById(req.params.photoId);
         if (!photo) {

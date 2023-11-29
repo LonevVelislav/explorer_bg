@@ -20,6 +20,11 @@ const commentSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: "User",
     },
+    photo: {
+        type: String,
+        default: "default.jpeg",
+        trim: true,
+    },
 });
 
 const Comment = mongoose.model("Comment", commentSchema);

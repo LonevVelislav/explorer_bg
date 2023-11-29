@@ -4,7 +4,7 @@ export default function Footer() {
             <div className="footer">
                 <div className="footer-logo">
                     <img
-                        src="./img/logo/b51a5c3039844aa0a6677738cf96e916-removebg-preview.png"
+                        src="/img/logo/b51a5c3039844aa0a6677738cf96e916-removebg-preview.png"
                         alt="bg explorer-logo"
                     />
                 </div>

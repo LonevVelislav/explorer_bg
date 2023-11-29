@@ -2,11 +2,11 @@ import { Link } from 'react-router-dom';
 
 export default function PhotoListItem({ _id, image, name, region, stars }) {
     return (
-        <Link to={`/games/${_id}`}>
+        <Link to={`/photos/${_id}`}>
             <div className="card">
                 <div className="card-likes">
                     <svg>
-                        <use xlinkHref="img/icons.svg#icon-star"></use>
+                        <use xlinkHref="/img/icons.svg#icon-star"></use>
                     </svg>
                     <span>{stars}</span>
                 </div>
@@ -15,7 +15,7 @@ export default function PhotoListItem({ _id, image, name, region, stars }) {
                         <div className="card-picture-overlay">&nbsp;</div>
                         <img
                             className="card-picture-image"
-                            src={`/public/img/photos/${_id}/${image}`}
+                            src={`/img/photos/${_id}/${image}`}
                             alt="place 1"
                         />
                     </div>
@@ -27,7 +27,7 @@ export default function PhotoListItem({ _id, image, name, region, stars }) {
                 <div className="card-details">
                     <div className="card-region__details">
                         <svg>
-                            <use xlinkHref="img/icons.svg#icon-map-pin"></use>
+                            <use xlinkHref="/img/icons.svg#icon-map-pin"></use>
                         </svg>
                         <p>Region:</p>
                         <span>{region}</span>

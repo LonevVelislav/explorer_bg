@@ -23,16 +23,21 @@ const photoShema = new mongoose.Schema(
             required: true,
             default: "default.jpg",
         },
-        coordinates: {
-            type: [Number],
-            required: [true, "photo requires coordinates"],
-            validate: {
-                validator: function (value) {
-                    return Array.isArray(value) && value.length > 0;
-                },
-                message:
-                    "Photo requires coordinates, right click on the pin location and copy the top two numbers.",
-            },
+        lat: {
+            type: Number,
+            trim: true,
+            required: [
+                true,
+                "Photo requires coordinates, right click on the pin location and copy the top two numbers.",
+            ],
+        },
+        lng: {
+            type: Number,
+            trim: true,
+            required: [
+                true,
+                "Photo requires coordinates, right click on the pin location and copy the top two numbers.",
+            ],
         },
         likes: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
         stars: { type: Number, default: 0 },
@@ -75,11 +80,10 @@ photoShema.pre("save", function (next) {
 });
 
 photoShema.pre("save", async function (next) {
-    if (this.coordinates) {
-        const data = await getGeoStats(this.coordinates[0], this.coordinates[1]);
+    const data = await getGeoStats(this.lat, this.lng);
 
-        this.region = data.address.county;
-    }
+    this.region = data.address.county;
+
     next();
 });
 
@@ -87,7 +91,7 @@ photoShema.pre("save", function (next) {
     if (this.isNew) {
         const pathToClient = path.resolve("../client/public/img/photos");
         const dir = `${pathToClient}/${this._id}`;
-        this.filename = `photo-${this._id}-${Date.now()}.jpeg`;
+        this.filename = this.imagefile.originalname;
         if (fs.existsSync(dir)) {
             fs.emptyDir(dir)
                 .then(() => console.log("All files deleted Successfully"))
@@ -97,41 +101,40 @@ photoShema.pre("save", function (next) {
         }
 
         sharp(this.imagefile.buffer).toFormat("jpeg").toFile(`${dir}/${this.filename}`);
-        this.image = this.filename;
-        this.imagefile = undefined;
     }
+    this.imagefile = undefined;
 
     next();
 });
 
-photoShema.pre(/^find/, function (next) {
+photoShema.pre(/^find/, async function (next) {
     if (this.op === "findOneAndUpdate") {
         const pathToClient = path.resolve("../client/public/img/photos");
         const dir = `${pathToClient}/${this._conditions._id}`;
-        this.filename = `photo-${this._conditions._id}-${Date.now()}.jpeg`;
-        if (fs.existsSync(dir)) {
-            fs.emptyDir(dir)
-                .then(() => console.log("All files deleted Successfully"))
-                .catch((e) => console.log(e));
+        this.filename = this._update.imagefile.originalname;
+        if (fs.existsSync(dir) && this._update.imagefile) {
+            await fs.emptyDir(dir);
+            sharp(this._update.imagefile.buffer).toFormat("jpeg").toFile(`${dir}/${this.filename}`);
         } else {
             fs.mkdirSync(dir, { recursive: true });
+            sharp(this._update.imagefile.buffer).toFormat("jpeg").toFile(`${dir}/${this.filename}`);
         }
 
-        sharp(this._update.imagefile.buffer).toFormat("jpeg").toFile(`${dir}/${this.filename}`);
-        this.image = this.filename;
-        this.imagefile = undefined;
+        const data = await getGeoStats(this._update.lat, this._update.lng);
+
+        this._update.region = data.address.county;
     }
+    this.imagefile = undefined;
 
     this.find({ secretPhoto: { $ne: true } });
 
-    this.start = Date.now();
     next();
 });
 
 //remove secret data from aggregation pipeline
 photoShema.pre("aggregate", function (next) {
     this.pipeline.unshift({
-        $match: { secretGame: { $ne: true } },
+        $match: { secretPhoto: { $ne: true } },
     });
     next();
 });
