@@ -79,7 +79,7 @@ router.post("/login", async (req, res) => {
     } catch (err) {
         res.status(401).json({
             status: "fail",
-            messsage: extractErrorMsg(err),
+            message: extractErrorMsg(err),
         });
     }
 });

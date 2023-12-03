@@ -151,6 +151,12 @@ button:focus {
   font-size: 2rem;
   transform: rotate(180deg);
 }
+.errors {
+  color: #f24f63;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  font-weight: 500;
+}
 
 /* header-section --------------------------------------*/
 .header {

@@ -2,8 +2,15 @@ const options = (data) => {
     const options = {};
     if (data) {
         options.body = JSON.stringify(data);
-        options.header = {
-            'Content-Type': 'application/json',
+        options.headers = {
+            'content-type': 'application/json',
+        };
+    }
+    const token = localStorage.getItem('token');
+    if (token) {
+        options.headers = {
+            ...options.headers,
+            Authorization: `Bearer ${token}`,
         };
     }
 
@@ -17,9 +24,6 @@ export const request = async (method, url, data) => {
     }
     const result = await response.json();
 
-    if (!response.status === 'fail') {
-        throw result;
-    }
     return result;
 };
 

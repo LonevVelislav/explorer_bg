@@ -1,6 +1,10 @@
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import AuthContext from '../../contexts/authContext';
 
 export default function Header() {
+    const { isAuth, username, image, userId } = useContext(AuthContext);
+
     return (
         <header className="header">
             <nav className="main-nav-list">
@@ -24,19 +28,42 @@ export default function Header() {
                 <Link to="/photos" className="main-nav-link btn">
                     All photos
                 </Link>
-                <Link to="#" className="main-nav-link btn">
-                    My photos
-                </Link>
-                <Link to="#" className="main-nav-link btn">
-                    Log in
-                </Link>
-                <Link to="#" className="main-nav-link btn">
-                    Sign in
-                </Link>
+                {isAuth && (
+                    <>
+                        <Link to="#" className="main-nav-link btn">
+                            My photos
+                        </Link>
+                        <Link to="/photos/create" className="main-nav-link btn">
+                            Create photo
+                        </Link>
+                        <Link to="/users/logout" className="main-nav-link btn">
+                            Logout
+                        </Link>
+                    </>
+                )}
+
+                {!isAuth && (
+                    <>
+                        <Link to="/users/login" className="main-nav-link btn">
+                            Log in
+                        </Link>
+                        <Link to="/users/register" className="main-nav-link btn">
+                            Sign up
+                        </Link>
+                    </>
+                )}
             </nav>
-            <Link to="#">
-                <img className="user-photo" src="/img/users_photos/leo.jpg" alt="User photo" />
-            </Link>
+            {isAuth && (
+                <>
+                    <Link to="/users/account">
+                        <img
+                            className="user-photo"
+                            src={`/img/users_photos/default.jpeg`}
+                            alt="User photo"
+                        />
+                    </Link>
+                </>
+            )}
         </header>
     );
 }

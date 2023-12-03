@@ -1,5 +1,8 @@
 const router = require("express").Router();
+const fs = require("fs-extra");
+const path = require("path");
 const Photo = require("../models/Photo");
+const Comment = require("../models/Comment");
 const QueryManipulation = require("../utils/QueryManipulator");
 
 const { extractErrorMsg } = require("../utils/errorHanler");
@@ -171,7 +174,11 @@ router.patch("/:id", protect, restrictToOnwer("Photo"), uploadPhoto(), async (re
 
 router.delete("/:id", protect, restrictToOnwer("Photo"), async (req, res) => {
     try {
+        const pathToClient = path.resolve("../client/public/img/photos");
         await Photo.findByIdAndDelete(req.params.id);
+        await Comment.deleteMany({ photoId: req.params.id });
+        //delete the folder containing current photo
+        fs.rmSync(`${pathToClient}/${req.params.id}`, { recursive: true, force: true });
         res.status(204).json({
             status: "success",
             data: null,

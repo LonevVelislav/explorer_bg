@@ -44,7 +44,6 @@ app.use(express.json({ limit: "10kb" }));
 app.use(cors());
 
 //db connection
-
 mongoose
     .connect(DB)
     .then(() => console.log("DB connection successfull."))

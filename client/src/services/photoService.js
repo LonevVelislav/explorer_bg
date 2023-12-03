@@ -21,3 +21,9 @@ export const getCoordinates = async (id) => {
 
     return result;
 };
+
+export const create = async (photoData) => {
+    const result = await request.post(baseUrl, photoData);
+
+    return result;
+};
