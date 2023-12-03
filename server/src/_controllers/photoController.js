@@ -146,18 +146,35 @@ router.post("/", protect, restrict("user"), uploadPhoto(), async (req, res) => {
 
 router.patch("/:id", protect, restrictToOnwer("Photo"), uploadPhoto(), async (req, res) => {
     try {
-        if (!req.file) {
-            throw new Error("Photo is required! Upload a photo and try again!");
+        let photo;
+        console.log(req.file);
+        if (req.file) {
+            photo = await Photo.findByIdAndUpdate(
+                req.params.id,
+                {
+                    ...req.body,
+                    imagefile: req.file,
+                    image: req.file.originalname,
+                    region: "",
+                },
+                {
+                    new: true,
+                    runValidators: true,
+                }
+            );
+        } else {
+            photo = await Photo.findByIdAndUpdate(
+                req.params.id,
+                {
+                    ...req.body,
+                },
+                {
+                    new: true,
+                    runValidators: true,
+                }
+            );
         }
 
-        const photo = await Photo.findByIdAndUpdate(
-            req.params.id,
-            { ...req.body, imagefile: req.file, image: req.file.originalname, region: "" },
-            {
-                new: true,
-                runValidators: true,
-            }
-        );
         res.status(201).json({
             status: "success",
             data: {

@@ -102,29 +102,32 @@ photoShema.pre("save", function (next) {
 
         sharp(this.imagefile.buffer).toFormat("jpeg").toFile(`${dir}/${this.filename}`);
     }
-    this.imagefile = undefined;
 
     next();
 });
 
 photoShema.pre(/^find/, async function (next) {
     if (this.op === "findOneAndUpdate") {
-        const pathToClient = path.resolve("../client/public/img/photos");
-        const dir = `${pathToClient}/${this._conditions._id}`;
-        this.filename = this._update.imagefile.originalname;
-        if (fs.existsSync(dir) && this._update.imagefile) {
-            await fs.emptyDir(dir);
-            sharp(this._update.imagefile.buffer).toFormat("jpeg").toFile(`${dir}/${this.filename}`);
-        } else {
-            fs.mkdirSync(dir, { recursive: true });
-            sharp(this._update.imagefile.buffer).toFormat("jpeg").toFile(`${dir}/${this.filename}`);
+        if (this._update.imagefile) {
+            const pathToClient = path.resolve("../client/public/img/photos");
+            const dir = `${pathToClient}/${this._conditions._id}`;
+            this.filename = this._update.imagefile.originalname;
+            if (fs.existsSync(dir) && this._update.imagefile) {
+                await fs.emptyDir(dir);
+                sharp(this._update.imagefile.buffer)
+                    .toFormat("jpeg")
+                    .toFile(`${dir}/${this.filename}`);
+            } else {
+                fs.mkdirSync(dir, { recursive: true });
+                sharp(this._update.imagefile.buffer)
+                    .toFormat("jpeg")
+                    .toFile(`${dir}/${this.filename}`);
+            }
         }
-
         const data = await getGeoStats(this._update.lat, this._update.lng);
 
         this._update.region = data.address.county;
     }
-    this.imagefile = undefined;
 
     this.find({ secretPhoto: { $ne: true } });
 

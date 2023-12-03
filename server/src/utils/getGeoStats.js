@@ -7,6 +7,6 @@ exports.getGeoStats = async (latitude, longitude) => {
 
         return data;
     } catch (err) {
-        console.log(err);
+        return err.message;
     }
 };

@@ -38,7 +38,14 @@ export default function Login() {
                         value={values[LoginFormKeys.Password]}
                     />
                 </div>
-                {errorMessage && <p className="errors">{errorMessage}</p>}
+                {errorMessage && (
+                    <div className="errors">
+                        <svg>
+                            <use xlinkHref="/img/icons.svg#icon-alert-circle"></use>
+                        </svg>
+                        <p>{errorMessage}</p>
+                    </div>
+                )}
                 <input className="btn" type="submit" value="login" />
                 <p>
                     <span>

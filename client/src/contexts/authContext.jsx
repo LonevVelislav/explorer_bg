@@ -15,7 +15,9 @@ export const AuthProvider = ({ children }) => {
         const result = await authService.login(values.email, values.password);
         if (result.status === 'fail') {
             setErrorsMessage(result.message);
-            return;
+            setTimeout(() => {
+                setErrorsMessage('');
+            }, 3000);
         }
         if (result.status === 'success') {
             setAuth({
@@ -39,7 +41,9 @@ export const AuthProvider = ({ children }) => {
         );
         if (result.status === 'fail') {
             setErrorsMessage(result.message);
-            return;
+            setTimeout(() => {
+                setErrorsMessage('');
+            }, 3000);
         }
         if (result.status === 'success') {
             setAuth({

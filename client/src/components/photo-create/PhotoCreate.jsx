@@ -15,6 +15,9 @@ export default function PhotoCreate() {
 
         formData.append('image', document.getElementById('image').files[0]);
         if (document.getElementById('coordinates').value.length === 0) {
+            setTimeout(() => {
+                setErrorsMessage('');
+            }, 3000);
             setErrorsMessage('coordinates are invalid!');
             return;
         }
@@ -29,14 +32,16 @@ export default function PhotoCreate() {
                 Authorization: `Bearer ${token}`,
             },
         })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.status === 'success') {
+            .then((data) => data.json())
+            .then((res) => {
+                if (res.status === 'success') {
                     navigate('/');
                 }
-                if (data.status === 'fail') {
-                    setErrorsMessage(data.message);
-                    return;
+                if (res.status === 'fail') {
+                    setErrorsMessage(res.message);
+                    setTimeout(() => {
+                        setErrorsMessage('');
+                    }, 2500);
                 }
             });
     };
@@ -57,7 +62,14 @@ export default function PhotoCreate() {
                     <input type="text" id="coordinates" name="coordinates" />
                 </div>
 
-                {errorMessage && <p className="errors">{errorMessage}</p>}
+                {errorMessage && (
+                    <div className="errors">
+                        <svg>
+                            <use xlinkHref="/img/icons.svg#icon-alert-circle"></use>
+                        </svg>
+                        <p>{errorMessage}</p>
+                    </div>
+                )}
                 <div>
                     <input className="btn" type="submit" value="Create Photo" />
                     <button className="btn btn-current-cordinates">

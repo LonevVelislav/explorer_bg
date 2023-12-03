@@ -15,6 +15,7 @@ import Login from './components/login/Login';
 import Register from './components/register/Register';
 import Account from './components/account-page/Accout';
 import Logout from './components/logout/Logout';
+import PhotoEdit from './components/photo-edit/PhotoEdit';
 
 function App() {
     return (
@@ -29,7 +30,9 @@ function App() {
                     <Route path="/photos/map/:id" element={<Map />} />
                     <Route path="/photos/create" element={<PhotoCreate />} />
                     <Route path="/users/login" element={<Login />} />
-                    <Route path="users/register" element={<Register />} />
+                    <Route path="/users/register" element={<Register />} />
+
+                    <Route path="/photos/:id/edit" element={<PhotoEdit />} />
                     <Route path="/users/account" element={<Account />} />
                     <Route path="/users/logout" element={<Logout />} />
                 </Routes>

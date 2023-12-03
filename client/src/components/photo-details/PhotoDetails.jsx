@@ -78,7 +78,7 @@ export default function PhotoDetails() {
                                     <svg>
                                         <use xlinkHref="/img/icons.svg#icon-bookmark"></use>
                                     </svg>
-                                    <Link to="#" className="edit-btn btn">
+                                    <Link to={`/photos/${photo._id}/edit`} className="edit-btn btn">
                                         Edit
                                     </Link>
                                 </li>
