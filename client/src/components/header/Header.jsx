@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import AuthContext from '../../contexts/authContext';
 
 export default function Header() {
-    const { isAuth, username, image, userId } = useContext(AuthContext);
+    const { isAuth, image, username, userId } = useContext(AuthContext);
 
     return (
         <header className="header">
@@ -55,11 +55,15 @@ export default function Header() {
             </nav>
             {isAuth && (
                 <>
-                    <Link to="/users/account">
+                    <Link to={`/users/account/${userId}`}>
                         <img
                             className="user-photo"
-                            src={`/img/users_photos/default.jpeg`}
-                            alt="User photo"
+                            src={
+                                image !== 'default.jpeg'
+                                    ? `/img/users_photos/${userId}/${image}`
+                                    : `/img/users_photos/default.jpeg`
+                            }
+                            alt={username}
                         />
                     </Link>
                 </>

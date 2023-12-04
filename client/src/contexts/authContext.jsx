@@ -58,6 +58,36 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const editAccountHandler = async (values) => {
+        fetch('http://localhost:3000/api/bg-explorer/users/updateMe', {
+            method: 'PATCH',
+            body: values,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        })
+            .then((data) => data.json())
+            .then((res) => {
+                if (res.status === 'success') {
+                    setAuth({
+                        _id: res.data.user._id,
+                        username: res.data.user.username,
+                        image: res.data.user.image,
+                        email: res.data.user.email,
+                        token: localStorage.getItem('token'),
+                    });
+
+                    navigate(`/users/account/${res.data.user._id}`);
+                }
+                if (res.status === 'fail') {
+                    setErrorsMessage(res.message);
+                    setTimeout(() => {
+                        setErrorsMessage('');
+                    }, 3000);
+                }
+            });
+    };
+
     const logoutHandler = () => {
         setAuth({});
         localStorage.removeItem('token');
@@ -67,11 +97,13 @@ export const AuthProvider = ({ children }) => {
         loginHandler,
         registerHandler,
         logoutHandler,
+        editAccountHandler,
         errorMessage,
         username: auth.username,
         email: auth.email,
         userId: auth._id,
         isAuth: !!auth.token,
+        image: auth.image,
     };
 
     return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;

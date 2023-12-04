@@ -1,12 +1,11 @@
 const router = require("express").Router();
-const bcrypt = require("bcrypt");
 
 const User = require("../models/User");
 const { extractErrorMsg } = require("../utils/errorHanler");
 const { createAndSendToken } = require("../utils/userToken");
 const { filterObject } = require("../utils/filterObject");
-const { restrict, protect } = require("../middlewares/authMiddlewares");
-const { uploadPhoto, usersPhotoConfig } = require("../middlewares/uploadPhotoMiddleware");
+const { restrict, protect, restrictToOnwer } = require("../middlewares/authMiddlewares");
+const { uploadPhoto } = require("../middlewares/uploadPhotoMiddleware");
 
 router.get("/", protect, restrict("admin"), async (req, res) => {
     try {
@@ -28,22 +27,28 @@ router.get("/", protect, restrict("admin"), async (req, res) => {
     }
 });
 
-router.get("/:id", protect, restrict("admin"), async (req, res) => {
-    try {
-        const user = await User.findById(req.params._id);
-        res.status(200).json({
-            status: "success",
-            data: {
-                user,
-            },
-        });
-    } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            message: extractErrorMsg(err),
-        });
+router.get(
+    "/:id",
+    protect,
+    restrict("admin", "user"),
+    restrictToOnwer("User"),
+    async (req, res) => {
+        try {
+            const user = await User.findById(req.params.id);
+            res.status(200).json({
+                status: "success",
+                data: {
+                    user,
+                },
+            });
+        } catch (err) {
+            res.status(400).json({
+                status: "fail",
+                message: extractErrorMsg(err),
+            });
+        }
     }
-});
+);
 
 router.post("/register", async (req, res) => {
     try {

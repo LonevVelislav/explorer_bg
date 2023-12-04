@@ -108,6 +108,13 @@ button:focus {
   width: 5rem;
   margin-left: 1.2rem;
 }
+.user-photo-account {
+  border-radius: 50%;
+  width: 15rem;
+  border: 1px solid #28b487;
+  background-color: #28b487;
+  padding: 0.8rem;
+}
 /* arrows ------------------------------------------------ */
 .arrow {
   border: solid #7dd56f;
@@ -357,6 +364,7 @@ a {
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
   text-transform: uppercase;
+  border-radius: 3px;
   background-image: -webkit-gradient(
     linear,
     left top,

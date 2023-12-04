@@ -61,7 +61,10 @@ exports.restrictToOnwer = (model) => {
             if (!element) {
                 throw new Error("there is no item with this id!");
             }
-            const owner = req.user._id.toString() === element.owner.toString();
+            const owner =
+                model === "User"
+                    ? req.user._id.toString() === element._id.toString()
+                    : req.user._id.toString() === element.owner.toString();
             if (!owner && req.user.role !== "admin") {
                 throw new Error("you are not the owner of this item!");
             }

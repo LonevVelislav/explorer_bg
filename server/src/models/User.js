@@ -69,7 +69,7 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.pre(/^find/, async function (next) {
-    if (this.op === "findOneAndUpdate") {
+    if (this.op === "findOneAndUpdate" && this._update.imagefile) {
         const pathToClient = path.resolve("../client/public/img/users_photos");
         const dir = `${pathToClient}/${this._conditions._id}`;
         this.filename = this._update.imagefile.originalname;
