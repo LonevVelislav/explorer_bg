@@ -22,8 +22,8 @@ body {
 .btn {
   background-color: #55c57a;
   color: #fdf2e9;
-  border-radius: 3px;
   align-self: end;
+  border-radius: 3px;
   padding: 1.3rem;
   font-size: 1.6rem;
   font-weight: 600;
@@ -50,6 +50,16 @@ button:focus {
   min-height: 100vh;
 }
 
+.invalid {
+  border-radius: 3px;
+  padding: 1.3rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  background-color: #859289;
+  text-transform: uppercase;
+  font-size: 1.6rem;
+  color: #ddf3e4;
+}
 .form {
   background-color: #ddf3e4;
   display: block;
@@ -452,6 +462,8 @@ svg {
   padding: 1.2rem;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
+  align-self: center;
 }
 
 .stats-box ul {
@@ -479,8 +491,22 @@ svg {
   -webkit-transition: all 0.3s;
   transition: all 0.3;
 }
+
+.buttons button {
+  border: none;
+  padding: 1rem 2rem;
+  width: 12.8rem;
+  text-align: start;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3;
+}
 .buttons a:hover,
 .buttons a:active {
+  width: 13.8rem;
+}
+
+.buttons button:hover,
+.buttons button:active {
   width: 13.8rem;
 }
 .delete-btn {
@@ -500,6 +526,8 @@ svg {
 .comment-form {
   display: flex;
   text-align: center;
+  align-self: flex-end;
+  width: 100%;
 }
 .comment-input {
   font-family: inherit;
@@ -509,9 +537,7 @@ svg {
   border: none;
   font-size: 1.5rem;
   color: #333;
-  padding-bottom: 3px;
   border-bottom: 2px solid #55c57a;
-  width: 25rem;
   outline-width: 0;
   text-transform: none;
 }
@@ -529,7 +555,6 @@ svg {
   list-style: none;
 }
 .comments-list li {
-  position: relative;
   display: flex;
   text-align: center;
   font-size: 1.6rem;

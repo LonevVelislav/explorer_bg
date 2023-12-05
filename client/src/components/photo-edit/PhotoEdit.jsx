@@ -22,7 +22,7 @@ export default function PhotoEdit() {
 
     const editPhotoHandler = async (e) => {
         e.preventDefault();
-
+        setLoading(true);
         const formData = new FormData();
         const token = localStorage.getItem('token');
         if (document.getElementById('coordinates').value.length === 0) {
@@ -47,6 +47,7 @@ export default function PhotoEdit() {
         })
             .then((data) => data.json())
             .then((res) => {
+                setLoading(false);
                 if (res.status === 'success') {
                     navigate(`/photos/${id}`);
                 }

@@ -81,7 +81,9 @@ photoShema.pre("save", function (next) {
 
 photoShema.pre("save", async function (next) {
     const data = await getGeoStats(this.lat, this.lng);
-
+    if (data.address === undefined) {
+        throw new Error("Cordinates are invalid!");
+    }
     this.region = data.address.county;
 
     next();
@@ -125,6 +127,9 @@ photoShema.pre(/^find/, async function (next) {
             }
         }
         const data = await getGeoStats(this._update.lat, this._update.lng);
+        if (data.address === undefined) {
+            throw new Error("Cordinates are invalid!");
+        }
 
         this._update.region = data.address.county;
     }

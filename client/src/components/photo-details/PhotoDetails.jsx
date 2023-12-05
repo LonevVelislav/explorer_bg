@@ -1,18 +1,86 @@
-import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useContext, useEffect, useState, useReducer } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import AuthContext from '../../contexts/authContext';
 import * as photoServices from '../../services/photoService';
+import * as commentsService from '../../services/commentsService';
+import reducer from './commentReducer';
+import likesReducer from './likesReducer';
 
 export default function PhotoDetails() {
+    const navigate = useNavigate();
     const { id } = useParams();
+    const { userId } = useContext(AuthContext);
+    const [errorMessage, setErrorsMessage] = useState('');
     const [loading, setLoading] = useState(true);
     const [photo, setPhoto] = useState({});
+    const [ifLiked, setIfLiked] = useState(false);
+    const [comments, commentDispatch] = useReducer(reducer, []);
+    const [likes, likeDispatch] = useReducer(likesReducer, []);
 
     useEffect(() => {
         photoServices.getPhotoById(id).then((res) => {
             setPhoto(res.data.photo);
+            commentDispatch({
+                type: 'get-all-comments',
+                payload: res.data.photo.comments,
+            });
+            likeDispatch({
+                type: 'get-all-likes',
+                payload: res.data.photo.likes,
+            });
+
             setLoading(false);
         });
     }, [id]);
+
+    useEffect(() => {
+        photoServices.ifLiked(id, userId).then((res) => {
+            if (res.status === 'success') {
+                setIfLiked(res.data);
+            }
+        });
+    }, [likes]);
+
+    const commentSubmitHandler = (e) => {
+        e.preventDefault();
+        commentsService
+            .createComment(id, { text: document.getElementById('comment').value })
+            .then((result) => {
+                if (result.status === 'success') {
+                    commentDispatch({
+                        type: 'add-comment',
+                        payload: result.data.comment,
+                    });
+                    document.getElementById('comment').value = '';
+                }
+                if (result.status === 'fail') {
+                    setErrorsMessage(result.message);
+                    setTimeout(() => {
+                        setErrorsMessage('');
+                    }, 3000);
+                }
+            });
+    };
+
+    const deleteBtnClickHandler = async () => {
+        const hasConfirmed = confirm(`You sure you want to delete photo "${photo.name}"`);
+        if (hasConfirmed) {
+            await photoServices.removePhoto(photo._id);
+
+            navigate('/photos');
+        }
+    };
+
+    const likeBtnClickHandler = async () => {
+        photoServices.likePhoto(photo._id).then((result) => {
+            if (result.status === 'success') {
+                likeDispatch({
+                    type: 'add-like',
+                    payload: photo.likes,
+                });
+            }
+        });
+    };
 
     if (loading) {
         return (
@@ -27,6 +95,12 @@ export default function PhotoDetails() {
             <>
                 <main className="main--details main">
                     <h1 className="card-heading__details">{photo.name}</h1>
+                    <div className="card-likes">
+                        <svg>
+                            <use xlinkHref="/img/icons.svg#icon-star"></use>
+                        </svg>
+                        <span>{likes.length}</span>
+                    </div>
                     <section className="card__details">
                         <div className="photo-box">
                             <img src={`/img/photos/${photo._id}/${photo.image}`} alt={photo.name} />
@@ -51,18 +125,15 @@ export default function PhotoDetails() {
                                 </li>
 
                                 <li>
+                                    <Link to={`/photos/map/${photo._id}`} className="btn">
+                                        Map
+                                    </Link>
                                     <img
                                         src="/img/logo/b51a5c3039844aa0a6677738cf96e916-removebg-preview2.png"
                                         alt="logo"
                                     />
-                                    <Link to={`/photos/map/${photo._id}`} className="btn">
-                                        Map
-                                    </Link>
                                 </li>
                                 <li className="google-maps-anchor">
-                                    <object data="/img/icons8-google-maps.svg" type="image/svg+xml">
-                                        <img src="/img/icons8-google-maps.svg" />
-                                    </object>
                                     <Link
                                         target="blank"
                                         className="btn"
@@ -70,37 +141,57 @@ export default function PhotoDetails() {
                                     >
                                         Google maps
                                     </Link>
+                                    <object data="/img/icons8-google-maps.svg" type="image/svg+xml">
+                                        <img src="/img/icons8-google-maps.svg" />
+                                    </object>
                                 </li>
                             </ul>
 
                             <ul className="buttons">
-                                <li>
-                                    <svg>
-                                        <use xlinkHref="/img/icons.svg#icon-bookmark"></use>
-                                    </svg>
-                                    <Link to={`/photos/${photo._id}/edit`} className="edit-btn btn">
-                                        Edit
-                                    </Link>
-                                </li>
-                                <li>
-                                    <svg>
-                                        <use xlinkHref="/img/icons.svg#icon-delete"></use>
-                                    </svg>
-                                    <Link to="#" className="delete-btn btn">
-                                        Delete
-                                    </Link>
-                                </li>
-                                <li>
-                                    <svg>
-                                        <use xlinkHref="/img/icons.svg#icon-star"></use>
-                                    </svg>
-                                    <Link to="#" className="like-btn btn">
-                                        Like
-                                    </Link>
-                                </li>
+                                {userId === photo.owner._id && (
+                                    <>
+                                        <li>
+                                            <Link
+                                                to={`/photos/${photo._id}/edit`}
+                                                className="edit-btn btn"
+                                            >
+                                                Edit
+                                            </Link>
+                                            <svg>
+                                                <use xlinkHref="/img/icons.svg#icon-bookmark"></use>
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <button
+                                                className="delete-btn btn"
+                                                onClick={deleteBtnClickHandler}
+                                            >
+                                                Delete
+                                            </button>
+                                            <svg>
+                                                <use xlinkHref="/img/icons.svg#icon-delete"></use>
+                                            </svg>
+                                        </li>
+                                    </>
+                                )}
+                                {userId && userId !== photo.owner._id && (
+                                    <>
+                                        <li>
+                                            <button
+                                                className={ifLiked ? 'invalid' : 'like-btn btn'}
+                                                onClick={likeBtnClickHandler}
+                                            >
+                                                Like
+                                            </button>
+                                            <svg>
+                                                <use xlinkHref="/img/icons.svg#icon-star"></use>
+                                            </svg>
+                                        </li>
+                                    </>
+                                )}
                             </ul>
 
-                            <form action="#" className="comment-form">
+                            <form className="comment-form" onSubmit={commentSubmitHandler}>
                                 <div className="user-comment-avatar">
                                     <svg>
                                         <use xlinkHref="/img/icons.svg#icon-user"></use>
@@ -114,17 +205,29 @@ export default function PhotoDetails() {
                                     rows="3"
                                     placeholder="Comment here"
                                 ></textarea>
-                                <input className="btn" type="submit" value="comment" />
+                                <input
+                                    className={userId ? 'btn' : 'invalid'}
+                                    type="submit"
+                                    value="comment"
+                                />
                             </form>
+                            {errorMessage && (
+                                <div className="errors">
+                                    <svg>
+                                        <use xlinkHref="/img/icons.svg#icon-alert-circle"></use>
+                                    </svg>
+                                    <p>{errorMessage}</p>
+                                </div>
+                            )}
                         </div>
                     </section>
                     {/* <!-- comments section --> */}
                     <section className="comments-section">
-                        {photo.comments.length === 0 && <p className="no-comment">No comments.</p>}
+                        {comments.length === 0 && <p className="no-comment">No comments.</p>}
                         <ul className="comments-list">
-                            {photo.comments.map(({ _id, owner, text, photo }) => {
+                            {comments.map(({ _id, owner, text, photo }) => {
                                 return (
-                                    <li key={_id}>
+                                    <li key={_id} id={_id}>
                                         <div className="user-comment-avatar">
                                             <img
                                                 className="user-photo"

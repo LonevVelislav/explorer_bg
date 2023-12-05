@@ -236,4 +236,27 @@ router.get("/like/:id", protect, restrict("user"), async (req, res) => {
     }
 });
 
+router.get("/liked/:id", protect, async (req, res) => {
+    try {
+        const photo = await Photo.findById(req.params.id);
+        console.log(photo.likes);
+        let data;
+        if (photo.likes.some((el) => el.toString() === req.query.userId)) {
+            data = true;
+        } else {
+            data = false;
+        }
+
+        res.status(200).json({
+            status: "success",
+            data,
+        });
+    } catch (err) {
+        res.status(400).json({
+            status: "fail",
+            message: extractErrorMsg(err),
+        });
+    }
+});
+
 module.exports = router;

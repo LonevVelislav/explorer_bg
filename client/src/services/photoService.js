@@ -21,3 +21,21 @@ export const getCoordinates = async (id) => {
 
     return result;
 };
+
+export const likePhoto = async (id) => {
+    const result = await request.get(`${baseUrl}/like/${id}`);
+
+    return result;
+};
+
+export const removePhoto = async (id) => {
+    const result = await request.del(`${baseUrl}/${id}`);
+
+    return result;
+};
+
+export const ifLiked = async (id, userId) => {
+    const result = await request.get(`${baseUrl}/liked/${id}?userId=${userId}`);
+
+    return result;
+};

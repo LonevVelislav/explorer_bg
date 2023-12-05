@@ -6,10 +6,11 @@ import * as photoService from '../../services/photoService';
 export default function PhotoCreate() {
     const navigate = useNavigate();
     const [errorMessage, setErrorsMessage] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const createPhotoHandler = async (e) => {
         e.preventDefault();
-
+        setLoading(true);
         const formData = new FormData();
         const token = localStorage.getItem('token');
 
@@ -34,6 +35,7 @@ export default function PhotoCreate() {
         })
             .then((data) => data.json())
             .then((res) => {
+                setLoading(false);
                 if (res.status === 'success') {
                     navigate('/');
                 }
@@ -48,6 +50,13 @@ export default function PhotoCreate() {
 
     return (
         <main className="main-create main">
+            {loading && (
+                <div className="loader">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            )}
             <form className="form" onSubmit={createPhotoHandler}>
                 <div>
                     <label htmlFor="image">Picture</label>
