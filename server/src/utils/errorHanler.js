@@ -2,6 +2,10 @@ const { MongooseError } = require("mongoose");
 const { JsonWebTokenError } = require("jsonwebtoken");
 
 exports.extractErrorMsg = (err) => {
+    if (err.name === "CastError") {
+        console.log(err);
+        return "404: Ivalid Path!";
+    }
     if (err instanceof MongooseError) {
         const msgs = Object.values(err.errors).map((el) => el.message);
         return msgs[0];
@@ -15,5 +19,6 @@ exports.extractErrorMsg = (err) => {
         const msg = "Not authorized login to get access!";
         return msg;
     }
+
     return err.message;
 };

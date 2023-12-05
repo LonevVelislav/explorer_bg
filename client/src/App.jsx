@@ -16,6 +16,7 @@ import Register from './components/register/Register';
 import Account from './components/account-page/Accout';
 import Logout from './components/logout/Logout';
 import PhotoEdit from './components/photo-edit/PhotoEdit';
+import CastError from './components/404/404';
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                 <Header />
 
                 <Routes>
+                    <Route path="*" element={<CastError />} />
                     <Route path="/" element={<PhotoList />} />
                     <Route path="/photos" element={<PhotoList />} />
                     <Route path="/photos/:id" element={<PhotoDetails />} />

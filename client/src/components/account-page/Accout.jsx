@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useContext } from 'react';
-
-import { Link } from 'react-router-dom';
 
 import AuthContext from '../../contexts/authContext';
 import isEmail from 'validator/lib/isEmail';

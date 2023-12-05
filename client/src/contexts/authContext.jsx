@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import * as authService from '../services/authSrvice';
@@ -85,7 +85,8 @@ export const AuthProvider = ({ children }) => {
                         setErrorsMessage('');
                     }, 3000);
                 }
-            });
+            })
+            .catch((err) => navigate('/404'));
     };
 
     const logoutHandler = () => {

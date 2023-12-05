@@ -9,12 +9,6 @@ const hpp = require("hpp");
 const { port, DB } = require("./config");
 const routes = require("./routes");
 
-process.on("uncouthError", (err) => {
-    console.log(`UNCAUGHT REJECTION! Shutting down...`);
-    console.log(err.name, err.message);
-    process.exit(1);
-});
-
 const app = express();
 
 //defence
@@ -51,7 +45,7 @@ mongoose
 
 app.use("/api/bg-explorer", routes);
 app.use("*", (req, res) => {
-    res.redirect("/api/bg-explorer/404");
+    res.redirect("/404");
 });
 
 const server = app.listen(port, () => console.log(`App is running on port: ${port}...`));

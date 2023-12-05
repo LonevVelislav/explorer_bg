@@ -18,19 +18,24 @@ export default function PhotoDetails() {
     const [likes, likeDispatch] = useReducer(likesReducer, []);
 
     useEffect(() => {
-        photoServices.getPhotoById(id).then((res) => {
-            setPhoto(res.data.photo);
-            commentDispatch({
-                type: 'get-all-comments',
-                payload: res.data.photo.comments,
-            });
-            likeDispatch({
-                type: 'get-all-likes',
-                payload: res.data.photo.likes,
-            });
+        photoServices
+            .getPhotoById(id)
+            .then((res) => {
+                setPhoto(res.data.photo);
+                commentDispatch({
+                    type: 'get-all-comments',
+                    payload: res.data.photo.comments,
+                });
+                likeDispatch({
+                    type: 'get-all-likes',
+                    payload: res.data.photo.likes,
+                });
 
-            setLoading(false);
-        });
+                setLoading(false);
+            })
+            .catch((err) => {
+                navigate('/404');
+            });
     }, [id]);
 
     useEffect(() => {
