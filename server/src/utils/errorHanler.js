@@ -3,7 +3,6 @@ const { JsonWebTokenError } = require("jsonwebtoken");
 
 exports.extractErrorMsg = (err) => {
     if (err.name === "CastError") {
-        console.log(err);
         return "404: Ivalid Path!";
     }
     if (err instanceof MongooseError) {

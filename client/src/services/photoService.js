@@ -39,3 +39,9 @@ export const ifLiked = async (id, userId) => {
 
     return result;
 };
+
+export const getOnwerPhotos = async (id) => {
+    const result = await request.get(`${baseUrl}?owner=${id}`);
+
+    return result;
+};

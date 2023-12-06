@@ -57,7 +57,8 @@ export default function PhotoEdit() {
                         setErrorsMessage('');
                     }, 3000);
                 }
-            });
+            })
+            .catch((err) => navigate('/404'));
     };
 
     const onNameChange = (e) => {

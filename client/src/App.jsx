@@ -16,7 +16,10 @@ import Register from './components/register/Register';
 import Account from './components/account-page/Accout';
 import Logout from './components/logout/Logout';
 import PhotoEdit from './components/photo-edit/PhotoEdit';
+import OwnerList from './components/photo-list/OnwerList';
+
 import CastError from './components/404/404';
+import AuthGuard from './components/guards/AuthGuard';
 
 function App() {
     return (
@@ -30,13 +33,16 @@ function App() {
                     <Route path="/photos" element={<PhotoList />} />
                     <Route path="/photos/:id" element={<PhotoDetails />} />
                     <Route path="/photos/map/:id" element={<Map />} />
-                    <Route path="/photos/create" element={<PhotoCreate />} />
                     <Route path="/users/login" element={<Login />} />
                     <Route path="/users/register" element={<Register />} />
 
-                    <Route path="/photos/:id/edit" element={<PhotoEdit />} />
-                    <Route path="/users/account/:id" element={<Account />} />
-                    <Route path="/users/logout" element={<Logout />} />
+                    <Route element={<AuthGuard />}>
+                        <Route path="/photos/create" element={<PhotoCreate />} />
+                        <Route path="/photos/:id/edit" element={<PhotoEdit />} />
+                        <Route path="/users/account/:id" element={<Account />} />
+                        <Route path="/users/logout" element={<Logout />} />
+                        <Route path="/users/photos/:id" element={<OwnerList />} />
+                    </Route>
                 </Routes>
 
                 <Footer />

@@ -7,3 +7,9 @@ export const createComment = async (photoId, data) => {
 
     return result;
 };
+
+export const deleteComment = async (id) => {
+    const result = await request.del(`${baseUrl}/${id}`);
+
+    return result;
+};

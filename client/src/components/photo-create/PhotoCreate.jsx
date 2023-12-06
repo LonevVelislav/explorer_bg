@@ -45,7 +45,8 @@ export default function PhotoCreate() {
                         setErrorsMessage('');
                     }, 2500);
                 }
-            });
+            })
+            .catch((err) => navigate('/404'));
     };
 
     return (

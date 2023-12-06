@@ -3,6 +3,7 @@ import { useContext } from 'react';
 
 import AuthContext from '../../contexts/authContext';
 import isEmail from 'validator/lib/isEmail';
+import { Link } from 'react-router-dom';
 
 export default function Account() {
     const { username, image, userId, email, editAccountHandler, errorMessage } =
@@ -78,9 +79,9 @@ export default function Account() {
                 <div className="account-btns">
                     <input className="btn" type="submit" value="Edit" />
 
-                    <a className="btn" href="#">
+                    <Link className="btn" to={`/users/photos/${userId}`}>
                         My photos
-                    </a>
+                    </Link>
                 </div>
 
                 {errorMessage && (

@@ -30,7 +30,7 @@ export default function Header() {
                 </Link>
                 {isAuth && (
                     <>
-                        <Link to="#" className="main-nav-link btn">
+                        <Link to={`/users/photos/${userId}`} className="main-nav-link btn">
                             My photos
                         </Link>
                         <Link to="/photos/create" className="main-nav-link btn">

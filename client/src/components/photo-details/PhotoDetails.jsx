@@ -76,7 +76,7 @@ export default function PhotoDetails() {
         }
     };
 
-    const likeBtnClickHandler = async () => {
+    const likeBtnClickHandler = () => {
         photoServices.likePhoto(photo._id).then((result) => {
             if (result.status === 'success') {
                 likeDispatch({
@@ -84,6 +84,14 @@ export default function PhotoDetails() {
                     payload: photo.likes,
                 });
             }
+        });
+    };
+
+    const delCommentBtnHandler = async (e) => {
+        await commentsService.deleteComment(e.target.id);
+        commentDispatch({
+            type: 'delete-comment',
+            payload: e.target.id,
         });
     };
 
@@ -241,7 +249,13 @@ export default function PhotoDetails() {
                                             />
                                         </div>
                                         <span>{text}</span>
-                                        <Link to="#" className="comment-delete__btn"></Link>
+                                        {userId === owner && (
+                                            <button
+                                                className="comment-delete__btn"
+                                                id={_id}
+                                                onClick={delCommentBtnHandler}
+                                            ></button>
+                                        )}
                                     </li>
                                 );
                             })}

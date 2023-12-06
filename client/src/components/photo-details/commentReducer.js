@@ -4,6 +4,9 @@ const reducer = (state, action) => {
             return [...action.payload];
         case 'add-comment':
             return [action.payload, ...state];
+        case 'delete-comment':
+            state = state.filter((el) => el._id !== action.payload);
+            return [...state];
         default:
             return state;
     }

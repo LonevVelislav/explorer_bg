@@ -4,12 +4,12 @@ const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const mongoSanitizer = require("express-mongo-sanitize");
-const hpp = require("hpp");
 
 const { port, DB } = require("./config");
 const routes = require("./routes");
 
 const app = express();
+app.use(cors());
 
 //defence
 app.use(helmet());
@@ -19,23 +19,10 @@ const limiter = rateLimit({
     windowMs: 60 * 60 * 1000,
     message: "Too many requests, please try again in an hour.",
 });
-app.use(
-    hpp({
-        whitelist: [
-            "duration",
-            "ratingsQuantity",
-            "ratingsAverage",
-            "maxGroupSize",
-            "difficulty",
-            "price",
-        ],
-    })
-);
 
 //config
 app.use("/api", limiter);
 app.use(express.json({ limit: "10kb" }));
-app.use(cors());
 
 //db connection
 mongoose
