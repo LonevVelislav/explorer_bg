@@ -1,23 +1,26 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import * as photoService from '../../services/photoService';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import PhotoListItem from './photo-item/PhotoItem';
 
 export default function PhotoList() {
+    const [params] = useSearchParams();
+    const queryString = params.toString();
     const navigate = useNavigate();
     const [photos, setPhotos] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        photoService
-            .getAllPhotos()
-            .then((el) => {
-                setPhotos(el.data.photos);
+        fetch(
+            `http://localhost:3000/api/bg-explorer/photos?sort=-stars&page=1&limit=10&fields=[_id,name,image,stars,region,]&${queryString}`
+        )
+            .then((data) => data.json())
+            .then((res) => {
+                setPhotos(res.data.photos);
                 setLoading(false);
             })
             .catch((err) => navigate('/404'));
-    }, []);
+    }, [params]);
     if (loading) {
         return (
             <div className="loader">
@@ -30,9 +33,12 @@ export default function PhotoList() {
         return (
             <main className="main">
                 {photos.length === 0 && (
-                    <>
-                        <p>No photos found!</p>
-                    </>
+                    <div className="no-content">
+                        <h1>No photos found!</h1>
+                        <svg>
+                            <use xlinkHref="/img/icons.svg#icon-alert-triangle"></use>
+                        </svg>
+                    </div>
                 )}
                 <div className="card-container">
                     {photos.map((el) => {

@@ -34,7 +34,7 @@ export default function Home() {
                             </Link>
                             &nbsp;of Bulgaria landscape!
                         </h1>
-                        <Link className="btn" to={`/photos/${photo._id}`}>
+                        <Link className="btn" to={`/photos/details/${photo._id}`}>
                             photo details
                         </Link>
                     </div>

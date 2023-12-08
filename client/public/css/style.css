@@ -249,12 +249,21 @@ a {
   border: none;
   margin-right: 0.8rem;
   transform: translateX(1px);
+  cursor: pointer;
 }
 
 .search-button svg {
   height: 2rem;
   width: 2rem;
   fill: #2b633d;
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+}
+
+.search-button:hover svg,
+.search-button:active svg {
+  fill: #e3ac42;
+  transform: scale(1.7);
 }
 .nav-search-input {
   font-family: inherit;
@@ -276,6 +285,17 @@ a {
   width: 25rem;
   border-bottom: 1px solid #2b633d;
 }
+.search-select {
+  background-color: #28b487;
+  color: #ddf3e4;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 3px;
+  margin-left: 0.8rem;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
 
 /* main_section ---------------------------------------------*/
 
@@ -287,6 +307,21 @@ a {
   grid-gap: 4rem;
 }
 
+.no-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 25rem;
+  margin: 0 auto;
+}
+.no-content h1 {
+  color: #55c57a;
+  text-transform: uppercase;
+}
+.no-content svg {
+  fill: #55c57a;
+  stroke: #55c57a;
+}
 /* card-styles ------------------------------------------*/
 
 .card {

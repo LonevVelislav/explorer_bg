@@ -1,20 +1,41 @@
 import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../../contexts/authContext';
 
 export default function Header() {
+    const navigate = useNavigate();
     const { isAuth, image, username, userId } = useContext(AuthContext);
+
+    const onSearchClickHandler = (e) => {
+        e.preventDefault();
+
+        const type = document.querySelector('.search-select').value;
+        const value = document.getElementById('search-places').value;
+
+        navigate(`/photos?${type}=${value}`);
+        e.target.reset();
+    };
 
     return (
         <header className="header">
             <nav className="main-nav-list">
-                <form className="nav-search">
+                <form className="nav-search" onSubmit={onSearchClickHandler}>
                     <button className="search-button">
                         <svg>
                             <use xlinkHref="/img/icons.svg#icon-search"></use>
                         </svg>
                     </button>
-                    <input type="text" placeholder="Search places" className="nav-search-input" />
+                    <input
+                        type="text"
+                        placeholder="Search places"
+                        className="nav-search-input"
+                        id="search-places"
+                    />
+                    <h3>Search by</h3>
+                    <select className="search-select">
+                        <option value="name">name</option>
+                        <option value="region">region</option>
+                    </select>
                 </form>
             </nav>
             <Link to="/" className="header-logo">

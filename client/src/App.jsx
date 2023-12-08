@@ -32,7 +32,7 @@ function App() {
                     <Route path="*" element={<CastError />} />
                     <Route path="/" element={<Home />} />
                     <Route path="/photos" element={<PhotoList />} />
-                    <Route path="/photos/:id" element={<PhotoDetails />} />
+                    <Route path="/photos/details/:id" element={<PhotoDetails />} />
                     <Route path="/photos/map/:id" element={<Map />} />
                     <Route path="/users/login" element={<Login />} />
                     <Route path="/users/register" element={<Register />} />

@@ -48,13 +48,6 @@ class QueryManipulation {
 
         return this;
     }
-    searchByregion() {
-        if (this.requestQuery.region) {
-            const region = this.requestQuery.region;
-            this.query = this.query.find({ region: region });
-        }
-        return this;
-    }
 
     searchByUserId() {
         if (this.requestQuery.owner) {
@@ -68,6 +61,22 @@ class QueryManipulation {
         if (this.requestQuery.photoId) {
             const photoId = this.requestQuery.photoId;
             this.query = this.query.find({ photoId: photoId });
+        }
+        return this;
+    }
+
+    searchByRegion() {
+        if (this.requestQuery.region) {
+            const region = this.requestQuery.region;
+            this.query = this.query.find({ region: region });
+        }
+    }
+
+    searchByName() {
+        if (this.requestQuery.name) {
+            const name = this.requestQuery.name;
+            const regex = new RegExp(name, "i");
+            this.query = this.query.find({ name: regex });
         }
         return this;
     }

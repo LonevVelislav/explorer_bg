@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export default function PhotoListItem({ _id, image, name, region, stars }) {
     return (
-        <Link to={`/photos/${_id}`}>
+        <Link to={`/photos/details/${_id}`}>
             <div className="card">
                 <div className="card-likes">
                     <svg>

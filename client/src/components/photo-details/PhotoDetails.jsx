@@ -39,11 +39,13 @@ export default function PhotoDetails() {
     }, [id]);
 
     useEffect(() => {
-        photoServices.ifLiked(id, userId).then((res) => {
-            if (res.status === 'success') {
-                setIfLiked(res.data);
-            }
-        });
+        if (userId) {
+            photoServices.ifLiked(id, userId).then((res) => {
+                if (res.status === 'success') {
+                    setIfLiked(res.data);
+                }
+            });
+        }
     }, [likes]);
 
     const commentSubmitHandler = (e) => {

@@ -19,7 +19,8 @@ router.get("/", async (req, res) => {
         .filterFields()
         .paginate()
         .searchByUserId()
-        .searchByregion();
+        .searchByName();
+    // .searchByName();
     try {
         const photos = await manipulated.query;
 
