@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as photoService from '../../services/photoService';
-
 export default function PhotoCreate() {
     const navigate = useNavigate();
     const [errorMessage, setErrorsMessage] = useState('');
@@ -37,7 +35,7 @@ export default function PhotoCreate() {
             .then((res) => {
                 setLoading(false);
                 if (res.status === 'success') {
-                    navigate('/');
+                    navigate('/photos');
                 }
                 if (res.status === 'fail') {
                     setErrorsMessage(res.message);

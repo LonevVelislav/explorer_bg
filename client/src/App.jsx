@@ -6,6 +6,7 @@ import { AuthProvider } from './contexts/authContext';
 
 //components imports
 import Header from './components/header/Header';
+import Home from './components/home/Home';
 import Footer from './components/footer/Footer';
 import PhotoList from './components/photo-list/PhotoList';
 import PhotoDetails from './components/photo-details/PhotoDetails';
@@ -29,7 +30,7 @@ function App() {
 
                 <Routes>
                     <Route path="*" element={<CastError />} />
-                    <Route path="/" element={<PhotoList />} />
+                    <Route path="/" element={<Home />} />
                     <Route path="/photos" element={<PhotoList />} />
                     <Route path="/photos/:id" element={<PhotoDetails />} />
                     <Route path="/photos/map/:id" element={<Map />} />

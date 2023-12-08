@@ -9,7 +9,7 @@ const { extractErrorMsg } = require("../utils/errorHanler");
 const { getTopPhoto } = require("../middlewares/photoMiddlewares");
 const { protect, restrict, restrictToOnwer } = require("../middlewares/authMiddlewares");
 
-const { uploadPhoto, photoConfig } = require("../middlewares/uploadPhotoMiddleware");
+const { uploadPhoto } = require("../middlewares/uploadPhotoMiddleware");
 
 // routes
 router.get("/", async (req, res) => {
@@ -95,15 +95,15 @@ router.get("/:id/coordinates", async (req, res) => {
     }
 });
 
-router.get("/top-photo", getTopPhoto, async (req, res) => {
-    const topPhotoQuery = new QueryManipulation(Photo.find(), req.query)
-        .filter()
-        .sort()
-        .filterFields()
-        .paginate();
-
+router.get("/get/top-photo", getTopPhoto, async (req, res) => {
     try {
-        const topPhotoData = await topPhotoQuery.query;
+        const topPhotoQuery = new QueryManipulation(Photo.find(), req.query)
+            .filter()
+            .sort()
+            .filterFields()
+            .paginate();
+
+        const topPhotoData = await topPhotoQuery.query.populate("owner");
 
         res.status(200).json({
             status: "success",

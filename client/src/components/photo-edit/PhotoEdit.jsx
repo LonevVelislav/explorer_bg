@@ -80,53 +80,55 @@ export default function PhotoEdit() {
     } else {
         return (
             <main className="main-create main">
-                <div>
+                <div className="flex-half">
                     <img src={`/img/photos/${photo._id}/${photo.image}`} alt="" />
                 </div>
-                <form className="form" onSubmit={editPhotoHandler}>
-                    <div>
-                        <label htmlFor="image">Picture</label>
-                        <input type="file" id="image" name="image" />
-                    </div>
-                    <div>
-                        <label htmlFor="name">Name</label>
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            value={name}
-                            onChange={onNameChange}
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="coordinates">Coordinates</label>
-                        <input
-                            type="text"
-                            id="coordinates"
-                            name="coordinates"
-                            value={coordinates}
-                            onChange={onCoordinatesChange}
-                        />
-                    </div>
-
-                    {errorMessage && (
-                        <div className="errors">
-                            <svg>
-                                <use xlinkHref="/img/icons.svg#icon-alert-circle"></use>
-                            </svg>
-                            <p>{errorMessage}</p>
+                <div className="flex-half">
+                    <form className="form" onSubmit={editPhotoHandler}>
+                        <div>
+                            <label htmlFor="image">Picture</label>
+                            <input type="file" id="image" name="image" />
                         </div>
-                    )}
-                    <div>
-                        <input className="btn" type="submit" value="Edit Photo" />
-                        <button className="btn btn-current-cordinates">
-                            <svg>
-                                <use xlinkHref="/img/icons.svg#icon-map-pin"></use>
-                            </svg>
-                            Use current coordinates
-                        </button>
-                    </div>
-                </form>
+                        <div>
+                            <label htmlFor="name">Name</label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                value={name}
+                                onChange={onNameChange}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="coordinates">Coordinates</label>
+                            <input
+                                type="text"
+                                id="coordinates"
+                                name="coordinates"
+                                value={coordinates}
+                                onChange={onCoordinatesChange}
+                            />
+                        </div>
+
+                        {errorMessage && (
+                            <div className="errors">
+                                <svg>
+                                    <use xlinkHref="/img/icons.svg#icon-alert-circle"></use>
+                                </svg>
+                                <p>{errorMessage}</p>
+                            </div>
+                        )}
+                        <div>
+                            <input className="btn" type="submit" value="Edit Photo" />
+                            <button className="btn btn-current-cordinates">
+                                <svg>
+                                    <use xlinkHref="/img/icons.svg#icon-map-pin"></use>
+                                </svg>
+                                Use current coordinates
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </main>
         );
     }

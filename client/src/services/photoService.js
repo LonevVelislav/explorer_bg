@@ -45,3 +45,9 @@ export const getOnwerPhotos = async (id) => {
 
     return result;
 };
+
+export const getTopPhoto = async () => {
+    const result = await request.get(`${baseUrl}/get/top-photo`);
+
+    return result;
+};

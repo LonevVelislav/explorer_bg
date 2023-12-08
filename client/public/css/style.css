@@ -185,6 +185,10 @@ button:focus {
   stroke: #ddf3e4;
   fill: #ddf3e4;
 }
+.flex-half {
+  position: relative;
+  flex: 50%;
+}
 
 /* header-section --------------------------------------*/
 .header {
@@ -700,6 +704,10 @@ svg {
   stroke: #ddf3e4;
   fill: #ddf3e4;
 }
+/* edit-page-styles -------------------------*/
+.flex-half img {
+  width: 100%;
+}
 
 /* error-page-styles --------------------*/
 .error {
@@ -779,4 +787,10 @@ svg {
     top: 24px;
     height: 32px;
   }
+}
+/* home-styles------------------------------------------- */
+.home-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
