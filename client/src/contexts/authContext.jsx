@@ -110,9 +110,7 @@ export const AuthProvider = ({ children }) => {
             .then((data) => data.json())
             .then((res) => {
                 if (res.status === 'success') {
-                    setAuth({});
-                    localStorage.removeItem('token');
-                    navigate('/users/login');
+                    logoutHandler();
                 }
 
                 if (res.status === 'fail') {
@@ -129,7 +127,20 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('token');
     };
 
+    const deleteHandler = async () => {
+        const result = await authService.removeUser();
+        setAuth({});
+        localStorage.removeItem('token');
+        if (result.status === 'fail') {
+            setErrorsMessage(res.message);
+            setTimeout(() => {
+                setErrorsMessage('');
+            }, 3000);
+        }
+    };
+
     const values = {
+        deleteHandler,
         loginHandler,
         registerHandler,
         logoutHandler,

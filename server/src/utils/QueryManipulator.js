@@ -64,14 +64,6 @@ class QueryManipulation {
         }
         return this;
     }
-
-    searchByRegion() {
-        if (this.requestQuery.region) {
-            const region = this.requestQuery.region;
-            this.query = this.query.find({ region: region });
-        }
-    }
-
     searchByName() {
         if (this.requestQuery.name) {
             const name = this.requestQuery.name;

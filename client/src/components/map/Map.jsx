@@ -30,7 +30,7 @@ export default function Map() {
         return (
             <>
                 <div className="backBtn">
-                    <Link className="arrow left" to={`/photos/${id}`}>
+                    <Link className="arrow left" to={`/photos/details/${id}`}>
                         <p>Details</p>
                     </Link>
                 </div>

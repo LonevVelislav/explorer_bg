@@ -15,7 +15,7 @@ app.use(cors());
 app.use(helmet());
 app.use(mongoSanitizer());
 const limiter = rateLimit({
-    max: 500,
+    max: 1000,
     windowMs: 60 * 60 * 1000,
     message: "Too many requests, please try again in an hour.",
 });

@@ -3,10 +3,11 @@ import { useContext } from 'react';
 
 import AuthContext from '../../contexts/authContext';
 import isEmail from 'validator/lib/isEmail';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Account() {
-    const { username, image, userId, email, editAccountHandler, errorMessage } =
+    const navigate = useNavigate();
+    const { username, image, userId, email, editAccountHandler, errorMessage, deleteHandler } =
         useContext(AuthContext);
     const [usernameValue, setUsernameValue] = useState(username);
     const [emailValue, setEmailValue] = useState(email);
@@ -38,70 +39,81 @@ export default function Account() {
             : (e.target.style.background = '#28b487');
     };
 
+    const submitDeleteHandler = async () => {
+        const hasConfirmed = confirm(`You sure you want to delete your account ${username}?`);
+        if (hasConfirmed) {
+            await deleteHandler();
+            navigate('/');
+        }
+    };
+
     return (
-        <main className="main-account main">
-            <form className="form" onSubmit={submitEditHandler}>
-                <img
-                    className="user-photo-account"
-                    src={
-                        image !== 'default.jpeg'
-                            ? `/img/users_photos/${userId}/${image}`
-                            : '/img/users_photos/default.jpeg'
-                    }
-                    alt={username}
-                />
-                <div>
-                    <label htmlFor="image">Profile picture</label>
-
-                    <input type="file" id="image" name="image" />
-                </div>
-                <div>
-                    <label htmlFor="username">{username}</label>
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        value={usernameValue}
-                        onChange={onUsernameChange}
+        <>
+            <main className="main-account main">
+                <form className="form" onSubmit={submitEditHandler}>
+                    <img
+                        className="user-photo-account"
+                        src={
+                            image !== 'default.jpeg'
+                                ? `/img/users_photos/${userId}/${image}`
+                                : '/img/users_photos/default.jpeg'
+                        }
+                        alt={username}
                     />
-                </div>
-                <div>
-                    <label htmlFor="email">Email</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={emailValue}
-                        onChange={onEmailChange}
-                    />
-                </div>
+                    <div>
+                        <label htmlFor="image">Profile picture</label>
 
-                <div className="account-btns">
-                    <input className="btn" type="submit" value="Edit" />
-
-                    <Link className="btn" to={`/users/photos/${userId}`}>
-                        My photos
-                    </Link>
-                    <Link className="btn" to={`/users/password-reset`}>
-                        Password Reset
-                    </Link>
-                </div>
-
-                {errorMessage && (
-                    <div className="errors">
-                        <svg>
-                            <use xlinkHref="/img/icons.svg#icon-alert-circle"></use>
-                        </svg>
-                        <p>{errorMessage}</p>
+                        <input type="file" id="image" name="image" />
                     </div>
-                )}
+                    <div>
+                        <label htmlFor="username">{username}</label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            value={usernameValue}
+                            onChange={onUsernameChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="email">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={emailValue}
+                            onChange={onEmailChange}
+                        />
+                    </div>
 
+                    <div className="account-btns">
+                        <input className="btn" type="submit" value="Edit" />
+
+                        <Link className="btn" to={`/users/photos/${userId}`}>
+                            My photos
+                        </Link>
+                        <Link className="btn" to={`/users/password-reset`}>
+                            Password Reset
+                        </Link>
+                    </div>
+
+                    {errorMessage && (
+                        <div className="errors">
+                            <svg>
+                                <use xlinkHref="/img/icons.svg#icon-alert-circle"></use>
+                            </svg>
+                            <p>{errorMessage}</p>
+                        </div>
+                    )}
+                </form>
+            </main>
+            <>
                 <div className="account-delete-btn">
-                    <a className="delete-btn btn" href="#">
+                    <button className="delete-btn btn" onClick={submitDeleteHandler}>
                         Delete Account
-                    </a>
+                    </button>
                 </div>
-            </form>
-        </main>
+            </>
+        </>
     );
 }

@@ -18,3 +18,9 @@ export const register = (username, email, password, confirmPassword) =>
         password,
         confirmPassword,
     });
+
+export const removeUser = async () => {
+    const result = await request.del(`${baseUrl}/deleteMe`);
+
+    return result;
+};

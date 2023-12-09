@@ -13,7 +13,7 @@ export default function Home() {
             setPhoto(res.data.photo[0]);
             setLoading(false);
         });
-    }, [photo]);
+    }, [photo._id]);
 
     if (loading) {
         return (
