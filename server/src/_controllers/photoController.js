@@ -120,7 +120,7 @@ router.get("/get/top-photo", getTopPhoto, async (req, res) => {
     }
 });
 
-router.post("/", protect, restrict("user"), uploadPhoto(), async (req, res) => {
+router.post("/", protect, restrict("user", "admin"), uploadPhoto(), async (req, res) => {
     try {
         if (!req.file) {
             throw new Error("Photo is required! Upload a photo and try again!");

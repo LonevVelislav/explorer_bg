@@ -322,6 +322,29 @@ a {
   fill: #55c57a;
   stroke: #55c57a;
 }
+
+.arrows {
+  display: flex;
+  align-items: center;
+
+  position: fixed;
+  float: left;
+  top: 90%;
+  left: 93%;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
+}
+.arrows button {
+  cursor: pointer;
+  border: none;
+}
+
+.arrows svg {
+  width: 4rem;
+  height: 4rem;
+}
+
 /* card-styles ------------------------------------------*/
 
 .card {

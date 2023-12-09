@@ -9,10 +9,22 @@ export default function PhotoList() {
     const navigate = useNavigate();
     const [photos, setPhotos] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+
+    function nextPage() {
+        setPage(page + 1);
+    }
+
+    function prevPage() {
+        if (page > 1) {
+            setPage(page - 1);
+        }
+    }
+    console.log(page);
 
     useEffect(() => {
         fetch(
-            `http://localhost:3000/api/bg-explorer/photos?sort=-stars&page=1&limit=10&fields=[_id,name,image,stars,region,]&${queryString}`
+            `http://localhost:3000/api/bg-explorer/photos?sort=-stars&page=${page}&limit=12&fields=[_id,name,image,stars,region,]&${queryString}`
         )
             .then((data) => data.json())
             .then((res) => {
@@ -20,7 +32,7 @@ export default function PhotoList() {
                 setLoading(false);
             })
             .catch((err) => navigate('/404'));
-    }, [params]);
+    }, [params, page]);
     if (loading) {
         return (
             <div className="loader">
@@ -44,6 +56,23 @@ export default function PhotoList() {
                     {photos.map((el) => {
                         return <PhotoListItem key={el._id} {...el} />;
                     })}
+                </div>
+                <div className="arrows">
+                    {page > 1 && (
+                        <button onClick={prevPage}>
+                            <svg>
+                                <use xlinkHref="/img/icons.svg#icon-arrow-left"></use>
+                            </svg>
+                        </button>
+                    )}
+
+                    {photos.length === 12 && (
+                        <button onClick={nextPage}>
+                            <svg>
+                                <use xlinkHref="/img/icons.svg#icon-arrow-right"></use>
+                            </svg>
+                        </button>
+                    )}
                 </div>
             </main>
         );

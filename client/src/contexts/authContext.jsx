@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }) => {
                     username: result.data.user.username,
                     image: result.data.user.image,
                     email: result.data.user.email,
+                    role: result.data.user.role,
                     token: result.token,
                 });
                 localStorage.setItem('token', result.token);
@@ -152,6 +153,7 @@ export const AuthProvider = ({ children }) => {
         userId: auth._id,
         isAuth: !!auth.token,
         image: auth.image,
+        role: auth.role,
     };
 
     return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;

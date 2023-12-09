@@ -9,7 +9,7 @@ import likesReducer from './likesReducer';
 export default function PhotoDetails() {
     const navigate = useNavigate();
     const { id } = useParams();
-    const { userId } = useContext(AuthContext);
+    const { userId, role } = useContext(AuthContext);
     const [errorMessage, setErrorsMessage] = useState('');
     const [loading, setLoading] = useState(true);
     const [photo, setPhoto] = useState({});
@@ -163,32 +163,33 @@ export default function PhotoDetails() {
                             </ul>
 
                             <ul className="buttons">
-                                {userId === photo.owner._id && (
-                                    <>
-                                        <li>
-                                            <Link
-                                                to={`/photos/${photo._id}/edit`}
-                                                className="edit-btn btn"
-                                            >
-                                                Edit
-                                            </Link>
-                                            <svg>
-                                                <use xlinkHref="/img/icons.svg#icon-bookmark"></use>
-                                            </svg>
-                                        </li>
-                                        <li>
-                                            <button
-                                                className="delete-btn btn"
-                                                onClick={deleteBtnClickHandler}
-                                            >
-                                                Delete
-                                            </button>
-                                            <svg>
-                                                <use xlinkHref="/img/icons.svg#icon-delete"></use>
-                                            </svg>
-                                        </li>
-                                    </>
-                                )}
+                                {userId === photo.owner._id ||
+                                    (role === 'admin' && (
+                                        <>
+                                            <li>
+                                                <Link
+                                                    to={`/photos/${photo._id}/edit`}
+                                                    className="edit-btn btn"
+                                                >
+                                                    Edit
+                                                </Link>
+                                                <svg>
+                                                    <use xlinkHref="/img/icons.svg#icon-bookmark"></use>
+                                                </svg>
+                                            </li>
+                                            <li>
+                                                <button
+                                                    className="delete-btn btn"
+                                                    onClick={deleteBtnClickHandler}
+                                                >
+                                                    Delete
+                                                </button>
+                                                <svg>
+                                                    <use xlinkHref="/img/icons.svg#icon-delete"></use>
+                                                </svg>
+                                            </li>
+                                        </>
+                                    ))}
                                 {userId && userId !== photo.owner._id && (
                                     <>
                                         <li>
