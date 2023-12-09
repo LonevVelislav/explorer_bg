@@ -11,6 +11,21 @@ export default function PhotoEdit() {
     const { id } = useParams();
     const [photo, setPhoto] = useState({});
 
+    const getCurrentCoordinates = () => {
+        navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
+            enableHighAccuracy: true,
+        });
+
+        function successLocation(pos) {
+            const currentLocation = [pos.coords.latitude, pos.coords.longitude];
+            document.getElementById('coordinates').value = currentLocation.join(',');
+        }
+        function errorLocation() {
+            const currentLocation = [23.326347032388227, 42.69641194208828];
+            document.getElementById('coordinates').value = currentLocation.join(',');
+        }
+    };
+
     useEffect(() => {
         photoService.getPhotoById(id).then((result) => {
             setPhoto(result.data.photo);
@@ -49,7 +64,7 @@ export default function PhotoEdit() {
             .then((res) => {
                 setLoading(false);
                 if (res.status === 'success') {
-                    navigate(`/photos/${id}`);
+                    navigate(`/photos/details/${id}`);
                 }
                 if (res.status === 'fail') {
                     setErrorsMessage(res.message);
@@ -120,14 +135,19 @@ export default function PhotoEdit() {
                         )}
                         <div>
                             <input className="btn" type="submit" value="Edit Photo" />
-                            <button className="btn btn-current-cordinates">
-                                <svg>
-                                    <use xlinkHref="/img/icons.svg#icon-map-pin"></use>
-                                </svg>
-                                Use current coordinates
-                            </button>
                         </div>
                     </form>
+                    <div>
+                        <button
+                            className="btn btn-current-cordinates"
+                            onClick={getCurrentCoordinates}
+                        >
+                            <svg>
+                                <use xlinkHref="/img/icons.svg#icon-map-pin"></use>
+                            </svg>
+                            Use current coordinates
+                        </button>
+                    </div>
                 </div>
             </main>
         );
