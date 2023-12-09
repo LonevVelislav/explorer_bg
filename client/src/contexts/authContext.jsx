@@ -97,6 +97,33 @@ export const AuthProvider = ({ children }) => {
             .catch((err) => navigate('/404'));
     };
 
+    const resetPasswordHandler = async (values) => {
+        fetch('http://localhost:3000/api/bg-explorer/users/upatePassword', {
+            method: 'PATCH',
+            body: JSON.stringify(values),
+
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'content-type': 'application/json',
+            },
+        })
+            .then((data) => data.json())
+            .then((res) => {
+                if (res.status === 'success') {
+                    setAuth({});
+                    localStorage.removeItem('token');
+                    navigate('/users/login');
+                }
+
+                if (res.status === 'fail') {
+                    setErrorsMessage(res.message);
+                    setTimeout(() => {
+                        setErrorsMessage('');
+                    }, 3000);
+                }
+            });
+    };
+
     const logoutHandler = () => {
         setAuth({});
         localStorage.removeItem('token');
@@ -107,6 +134,7 @@ export const AuthProvider = ({ children }) => {
         registerHandler,
         logoutHandler,
         editAccountHandler,
+        resetPasswordHandler,
         errorMessage,
         username: auth.username,
         email: auth.email,

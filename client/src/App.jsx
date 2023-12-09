@@ -21,6 +21,7 @@ import OwnerList from './components/photo-list/OnwerList';
 
 import CastError from './components/404/404';
 import AuthGuard from './components/guards/AuthGuard';
+import ResetPassword from './components/reset-password/ResetPassword';
 
 function App() {
     return (
@@ -41,6 +42,7 @@ function App() {
                         <Route path="/photos/create" element={<PhotoCreate />} />
                         <Route path="/photos/:id/edit" element={<PhotoEdit />} />
                         <Route path="/users/account/:id" element={<Account />} />
+                        <Route path="/users/password-reset" element={<ResetPassword />} />
                         <Route path="/users/logout" element={<Logout />} />
                         <Route path="/users/photos/:id" element={<OwnerList />} />
                     </Route>

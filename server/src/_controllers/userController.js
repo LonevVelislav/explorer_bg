@@ -93,6 +93,8 @@ router.patch("/upatePassword", protect, async (req, res) => {
     try {
         const user = await User.findById(req.user._id).select("+password");
 
+        console.log(req.body, req.user);
+
         const correctPassword = await user.correctPassword(req.body.oldPassword, user.password);
         if (!correctPassword) {
             throw new Error("your current password is wrong!");

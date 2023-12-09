@@ -82,6 +82,9 @@ export default function Account() {
                     <Link className="btn" to={`/users/photos/${userId}`}>
                         My photos
                     </Link>
+                    <Link className="btn" to={`/users/password-reset`}>
+                        Password Reset
+                    </Link>
                 </div>
 
                 {errorMessage && (
