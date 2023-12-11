@@ -246,7 +246,11 @@ export default function PhotoDetails() {
                                         <div className="user-comment-avatar">
                                             <img
                                                 className="user-photo"
-                                                src={`/img/users_photos/${owner}/${photo}`}
+                                                src={
+                                                    photo === 'default.jpeg'
+                                                        ? '/img/users_photos/default.jpeg'
+                                                        : `/img/users_photos/${owner}/${photo}`
+                                                }
                                                 alt={`${photo}`}
                                             />
                                         </div>
