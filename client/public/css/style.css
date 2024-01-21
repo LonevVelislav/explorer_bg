@@ -138,6 +138,7 @@ button:focus {
   cursor: pointer;
   margin: 1rem;
   font-size: 2rem;
+  z-index: 999;
 }
 
 .right {
@@ -165,7 +166,9 @@ button:focus {
 
 .backBtn {
   position: absolute;
+  top: 20%;
   cursor: pointer;
+  z-index: 999;
 }
 .backBtn p {
   font-size: 1rem;
@@ -695,14 +698,15 @@ svg {
 
 /* map-styles-------------------------------------------------- */
 .map-box {
+  position: fixed;
+  top: 10%;
+  width: 100%;
+  height: 80%;
   border-radius: 3px;
   -webkit-box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
   box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
   background-color: #aae2bd;
-  margin: 0 auto;
   padding: 1.2rem;
-  width: 160rem;
-  height: 100rem;
   overflow: hidden;
 }
 .map-box p {
@@ -723,6 +727,7 @@ svg {
   align-items: center;
   justify-content: space-between;
   max-width: 50rem;
+  margin-left: 5rem;
 }
 
 .marker {
@@ -838,8 +843,8 @@ svg {
 
 .footer {
   position: fixed;
-  top: 91%;
-  right: 0;
+  top: 95%;
+  left: 0;
 }
 .footer-flex {
   display: flex;
@@ -981,6 +986,7 @@ svg {
     top: 0;
   }
   .form {
+    font-size: 5rem;
     width: 90%;
   }
   .btn {
@@ -997,6 +1003,16 @@ svg {
   }
   .card-container {
     grid-template-columns: repeat(3, 1fr);
+  }
+  .map-box {
+    top: 0;
+    left: 2%;
+    width: 100%;
+    height: 100vh;
+  }
+  #map {
+    width: 100vw;
+    height: 100vh;
   }
 }
 

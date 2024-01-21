@@ -254,8 +254,8 @@ export default function PhotoDetails() {
                                                 className="user-photo"
                                                 src={
                                                     photo === 'default.jpeg'
-                                                        ? '/img/users_photos/default.jpeg'
-                                                        : `/img/users_photos/${owner}/${photo}`
+                                                        ? `${config.host}/users_photos/default.jpeg`
+                                                        : `${config.host}/users_photos/${owner}/${photo}`
                                                 }
                                                 alt={`${photo}`}
                                             />

@@ -42,7 +42,7 @@ export const renderMapBox = async (location, lng, lat) => {
         const map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/velislav/cld4ortkj000201lhhk5bspkj',
-            scrollZoom: false,
+            scrollZoom: true,
             zoom: 6,
         });
 
