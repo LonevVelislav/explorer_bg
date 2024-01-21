@@ -81,7 +81,6 @@ photoShema.pre("save", function (next) {
 
 photoShema.pre("save", async function (next) {
     const data = await getGeoStats(this.lat, this.lng);
-    console.log(data);
     if (data.address === undefined) {
         throw new Error("Cordinates are invalid!");
     }
